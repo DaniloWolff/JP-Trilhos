@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Metro SP</title>
+
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://www.googletagmanager.com https://*.adtrafficquality.google; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; frame-src 'self' https://googleads.g.doubleclick.net https://*.googlesyndication.com https://*.google.com https://*.adtrafficquality.google; connect-src 'self' https://brasilapi.com.br https://nominatim.openstreetmap.org https://www.google-analytics.com https://*.google-analytics.com https://*.adtrafficquality.google https://metrostatuskv.danilolealwolff.workers.dev;">
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" id="meta-theme-color" content="#00539B">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    
+    <link rel="icon" type="image/png" href="icon-192.png">
+    <link rel="apple-touch-icon" href="icon-192.png">
+
+    <style>
+        :root {
+            --bg-color: #f0f2f5; --card-bg: #ffffff; --text-color: #1d1d1f;
+            --secundary: #86868b; --offline-green: #34c759; --metro-blue: #00539B;
+        }
+        
+        body, .app-container, .btn-service, .info-card, .address-box, select, .route-input, .modal-overlay, .poi-content {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color); color: var(--text-color);
+            margin: 0; padding: 15px; display: flex; justify-content: center;
+        }
+        .app-container {
+            background-color: var(--card-bg); width: 100%; max-width: 480px;
+            border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            padding: 25px; box-sizing: border-box; position: relative;
+        }
+       
+        .top-nav-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 15px; width: 100%; flex-wrap: nowrap;
+        }
+        .nav-left { display: flex; gap: 4px; align-items: center; }
+        .nav-right { display: flex; align-items: center; }
+        
+        .badge-mini {
+            background: transparent; border: 1px solid #d2d2d7; padding: 4px 6px;
+            border-radius: 6px; font-size: 10px; font-weight: bold; color: var(--secundary);
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            white-space: nowrap;
+        }
+        .badge-mini:hover { background: #f0f0f5; }
+        
+        .lang-select-clean {
+            background: transparent; border: none; font-size: 14px; font-weight: bold;
+            outline: none; cursor: pointer; appearance: none; -webkit-appearance: none;
+            color: #1d1d1f; padding: 4px; border-radius: 8px;
+        }
+        
+        .header { text-align: center; margin-bottom: 25px; }
+        .header h1 { font-size: 26px; margin: 0; color: #1d1d1f; font-weight: 800; }
+        .header p { margin: 5px 0 0; font-size: 13px; color: var(--secundary); font-weight: 500; }
+
+        .info-card {
+            background: #fff9c4; border: 1px solid #fff59d; border-radius: 10px;
+            padding: 12px; margin-bottom: 20px; display: flex; flex-direction: column; align-items: center; gap: 5px;
+            font-size: 13px; font-weight: 600; color: #827717; text-align: center;
+        }
+        
+        .quick-services { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .quick-services > button:last-child:nth-child(odd) { grid-column: span 2; }
+
+        .btn-service {
+            background: #fff; border: 1px solid #e5e5ea; padding: 10px 5px;
+            border-radius: 12px; font-size: 12px; font-weight: bold; color: #333;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.02); text-align: center; min-height: 85px;
+        }
+        .btn-service:hover { background: #f0f0f5; }
+        
+        .icon-service { 
+            font-size: 26px; display: flex; align-items: center; justify-content: center; 
+            margin-bottom: 5px; line-height: 1; 
+        }
+
+        .btn-samu { border-color: #ffcdd2; background-color: #fff0f2; }
+        .btn-samu .lbl-destaque { color: #c62828; }
+
+        .form-group { margin-bottom: 15px; position: relative; }
+        label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 13px; color: #494949; }
+        
+        .input-with-gps { display: flex; gap: 8px; }
+        .input-with-gps select, .input-with-gps .route-input { flex: 1; }
+        .btn-gps {
+            background: #e3f2fd; border: 1px solid #bbdefb; border-radius: 10px; width: 45px;
+            font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+        }
+
+         select, .route-input {
+            width: 100%; padding: 12px; border-radius: 10px;
+            border: 1px solid #c7c7cc; font-size: 16px; box-sizing: border-box; 
+            background-color: #fafafa; outline: none; appearance: none; -webkit-appearance: none;
+            /* CORREÇÃO M-02: Reticências nos nomes longos */
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            padding-right: 25px; /* Espaço para a setinha */
+        }
+        
+        select option {
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+        
+        .swap-container { text-align: center; margin: -15px 0; z-index: 10; position: relative; }
+        
+        .btn-swap {
+            background: #1d1d1f; color: white; border: none; border-radius: 50%;
+            width: 44px; height: 44px; font-size: 18px; cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2); transition: transform 0.2s;
+        }
+        .btn-swap:active { transform: rotate(180deg); }
+
+        .btn-main {
+            width: 100%; padding: 16px; background-color: #000000;
+            color: white; border: none; border-radius: 12px;
+            font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .result-box { margin-top: 25px; padding-top: 20px; border-top: 1px solid #e5e5ea; display: none; }
+        .time-box {
+            background-color: #e8f5e9; color: #2e7d32; padding: 12px;
+            border-radius: 10px; text-align: center; font-weight: bold; margin-bottom: 15px; font-size: 15px; border: 1px solid #c8e6c9;
+        }
+        .alert-box {
+            background-color: #fff3e0; color: #e65100; padding: 12px; border: 1px solid #ffe0b2;
+            border-radius: 10px; font-size: 12px; font-weight: bold; margin-bottom: 15px; display: none; text-align: center;
+        }
+        .route-step {
+            display: flex; align-items: center; margin-bottom: 10px;
+            font-size: 14px; background: #fbfbfd; padding: 10px; border-radius: 8px; border: 1px solid #f0f0f0; line-height: 1.4;
+        }
+        .line-badge {
+            display: inline-block; padding: 4px 8px; border-radius: 6px;
+            color: white; font-weight: bold; font-size: 11px; margin-right: 10px; min-width: 85px; text-align: center; text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        .sentido-text { font-size: 12px; color: #d32f2f; display: block; margin-top: 3px; font-weight: bold;}
+
+        .action-buttons-row { display: flex; gap: 10px; margin-top: 15px; }
+        .btn-action { flex: 1; padding: 12px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 6px; font-size: 13px; }
+        .btn-share { background-color: #e5e5ea; color: #1d1d1f; }
+        .btn-uber { background-color: #000000; color: #ffffff; display: none; }
+
+        .tourist-box { margin-top: 20px; display: none; }
+        .btn-expand { width: 100%; background-color: #e3f2fd; color: #0d47a1; border: 1px solid #bbdefb; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; display: flex; justify-content: space-between; }
+
+        .address-box { background: #f8f9fa; border: 1px solid #e5e5ea; border-radius: 12px; padding: 15px; margin-bottom: 20px; }
+        .address-box h4 { margin: 0 0 10px 0; font-size: 14px; color: #1d1d1f; display: flex; align-items: center; gap: 5px;}
+        
+        /* NOVO DESIGN DA BARRA DE PESQUISA (EM COLUNA) */
+        .address-input-group { display: flex; flex-direction: column; gap: 10px; width: 100%; box-sizing: border-box; }
+        .input-mic-wrapper { position: relative; display: flex; width: 100%; }
+        .address-input-group input { 
+            width: 100%; padding: 14px 50px 14px 14px; 
+            border-radius: 10px; border: 1px solid #c7c7cc; font-size: 16px; 
+            outline: none; background: #fff; box-sizing: border-box;
+        }
+        .btn-voz-inside { 
+            position: absolute; right: 5px; top: 5px; bottom: 5px; 
+            width: 42px; background: #f0f0f5; border: none; border-radius: 8px; 
+            font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+        }
+        .btn-search-address { background: var(--metro-blue); color: white; border: none; border-radius: 10px; padding: 14px; font-weight: bold; cursor: pointer; font-size: 15px; transition: background 0.2s; width: 100%; }
+        .btn-search-address:hover { background: #003d73; }
+        
+        .address-result { margin-top: 12px; padding: 12px; background: #e8f5e9; border: 1px solid #c8e6c9; border-radius: 8px; font-size: 13px; color: #2e7d32; display: none; line-height: 1.5; }
+        .address-actions { display: flex; gap: 8px; margin-top: 10px; }
+        .btn-set-station { flex: 1; background: #ffffff; border: 1px solid #c8e6c9; color: #2e7d32; padding: 8px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 11px; }
+        
+        .poi-content { display: none; padding: 15px; background: #fafafa; border: 1px solid #eee; border-radius: 0 0 10px 10px; border-top: none; flex-direction: column; gap: 12px; }
+        .poi-category { background: #ffffff; border: 1px solid #e5e5ea; border-radius: 10px; padding: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .poi-category h4 { margin: 0 0 10px 0; color: var(--text-color); font-size: 14px; border-bottom: 1px solid #f0f0f5; padding-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+        .poi-category ul { margin: 0; padding-left: 20px; color: var(--secundary); line-height: 1.6; font-size: 13px; }
+
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #ffffff; z-index: 1000; flex-direction: column; }
+        .modal-header { width: 100%; padding: 15px; box-sizing: border-box; background: #1d1d1f; display: flex; justify-content: space-between; align-items: center; color: white; gap: 10px; }
+        .btn-fechar-modal { background: #ff3b30; color: white; border: none; padding: 8px 15px; border-radius: 20px; font-weight: bold; cursor: pointer; }
+        .mapa-actions { padding: 12px; width: 100%; box-sizing: border-box; background: #fbfbfd; text-align: center; border-bottom: 1px solid #ddd; }
+        .btn-download { background: var(--offline-green); color: white; text-decoration: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; display: inline-block; box-shadow: 0 2px 5px rgba(0,0,0,0.1); width: 80%; }
+        .mapa-container { flex: 1; overflow: auto; background: #e5e5ea; position: relative; -webkit-overflow-scrolling: touch; }
+        #imgMapa { width: 100%; height: auto; display: block; transition: width 0.2s ease-out; }
+        .zoom-controls { position: fixed; bottom: 30px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 1100; }
+        .btn-zoom { width: 50px; height: 50px; border-radius: 50%; background: #1d1d1f; color: white; font-size: 28px; border: 2px solid white; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; }
+        
+        #toast { visibility: hidden; min-width: 250px; background-color: #333; color: #fff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 2000; left: 50%; bottom: 30px; transform: translateX(-50%); box-shadow: 0 4px 12px rgba(0,0,0,0.2); font-size: 14px; font-weight: bold; opacity: 0; transition: opacity 0.3s, bottom 0.3s; }
+        #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
+
+        /* Dark Mode Global */
+        body.dark-mode { --bg-color: #000000; --card-bg: #1c1c1e; --text-color: #f5f5f7; --secundary: #a1a1a6; }
+        body.dark-mode .btn-service, body.dark-mode select, body.dark-mode .route-input, body.dark-mode .lang-select-clean, body.dark-mode .poi-content, body.dark-mode .route-step, body.dark-mode .modal-overlay, body.dark-mode .status-item { background-color: #2c2c2e !important; color: #f5f5f7 !important; border-color: #3a3a3c !important; }
+        body.dark-mode .btn-samu { background-color: #4a0000 !important; border-color: #800000 !important; }
+        body.dark-mode .btn-samu .lbl-destaque { color: #ff9999 !important; }
+        body.dark-mode .btn-share { background-color: #3a3a3c !important; color: #f5f5f7 !important; }
+        body.dark-mode .btn-uber { background-color: #f5f5f7 !important; color: #1d1d1f !important; }
+        body.dark-mode .btn-swap { background: #f5f5f7 !important; color: #1d1d1f !important; }
+        body.dark-mode .info-card { background: #332b00 !important; border-color: #4d4100 !important; color: #ffd60a !important; }
+        body.dark-mode .btn-gps, body.dark-mode .btn-expand { background: #003366 !important; border-color: #004080 !important; color: #66b3ff !important; }
+        body.dark-mode .mapa-actions { background: #1c1c1e !important; border-bottom: 1px solid #3a3a3c !important; }
+        body.dark-mode label { color: #d1d1d6 !important; }
+        body.dark-mode .time-box { background: #003314 !important; border-color: #004d1f !important; color: #4cd964 !important;}
+        body.dark-mode .alert-box { background: #4d1a00 !important; border-color: #662200 !important; color: #ff9500 !important;}
+        body.dark-mode .address-box { background: #1c1c1e !important; border-color: #3a3a3c !important; }
+        body.dark-mode .address-box h4 { color: #f5f5f7 !important; }
+        body.dark-mode .address-input-group input { background: #2c2c2e !important; color: white !important; border-color: #555557 !important; }
+        body.dark-mode .btn-voz-inside { background: #3a3a3c !important; color: #f5f5f7 !important; }
+        body.dark-mode .address-result { background: #003314 !important; border-color: #004d1f !important; color: #4cd964 !important; }
+        body.dark-mode .btn-set-station { background: #2c2c2e !important; border-color: #004d1f !important; color: #4cd964 !important; }
+        body.dark-mode .poi-category { background: #1c1c1e !important; border-color: #3a3a3c !important; }
+        body.dark-mode .poi-category h4 { color: #f5f5f7 !important; border-bottom-color: #3a3a3c !important; }
+        body.dark-mode .poi-category ul { color: #d1d1d6 !important; }
+        body.dark-mode #toast { background-color: #f5f5f7; color: #1d1d1f; }
+        body.dark-mode .btn-report-small { background-color: #4a4a4c !important; color: #f5f5f7 !important; border-color: #555557 !important; }
+        body.dark-mode .header h1 { color: #f5f5f7 !important; }
+        body.dark-mode .badge-mini { border-color: #555557 !important; color: #a1a1a6 !important; }
+        body.dark-mode .badge-mini:hover { background: #2c2c2e !important; }
+        body.dark-mode .lang-select-clean { background-color: transparent !important; color: #f5f5f7 !important; border: none !important; }
+        body.dark-mode .lang-select-clean option { background-color: #1c1c1e; color: #f5f5f7; }
+
+        .status-container { padding: 15px; flex: 1; overflow-y: auto; background: var(--bg-color); }
+        .status-item { display: flex; align-items: center; justify-content: space-between; padding: 12px; margin-bottom: 10px; background: var(--card-bg); border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); border: 1px solid #e5e5ea; gap: 8px; }
+        .status-info { flex: 1; font-size: 13px; line-height: 1.4; display: flex; flex-direction: column;}
+        .status-normal { color: #2e7d32; font-weight: bold; }
+        .status-alert { color: #c62828; font-weight: bold; }
+        .btn-report-small { background: #f0f0f5; border: 1px solid #d2d2d7; border-radius: 8px; padding: 8px; font-size: 12px; cursor: pointer; font-weight: bold; color: var(--text-color); display: flex; align-items: center; justify-content: center; min-width: 36px; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="top-nav-bar">
+        <div class="nav-left">
+            <button id="badge_offline" class="badge-mini" title="Offline">✅ Funciona Offline</button>
+            <button id="btn_lite" class="badge-mini" onclick="toggleLiteMode()" title="Ultra Lite">⚡ Lite</button>
+            <button id="btn_tema" class="badge-mini" onclick="toggleTema()" title="Mudar Tema">🌙 Escuro</button>
+        </div>
+        
+        <div class="nav-right">
+            <select id="idioma" class="lang-select-clean" onchange="mudarIdioma()" aria-label="Selecione o Idioma" title="Selecionar idioma">
+                <option value="pt">🇧🇷 PT</option>
+                <option value="en">🇺🇸 EN</option>
+                <option value="es">🇪🇸 ES</option>
+                <option value="fr">🇫🇷 FR</option>
+                <option value="it">🇮🇹 IT</option>
+                <option value="de">🇩🇪 DE</option>
+                <option value="ja">🇯🇵 JA</option>
+                <option value="zh">🇨🇳 ZH</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="header">
+        <h1 id="lbl_title">🚇 Metrô SP</h1>
+        <p id="lbl_subtitle">Rápido, leve e direto ao ponto.</p>
+    </div>
+
+    <div id="pwa-install-banner" style="display: none; background: #00539B; color: white; padding: 12px; border-radius: 12px; margin-bottom: 15px; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+        <span id="lbl_pwa_text" style="font-size: 13px; font-weight: bold;">📲 Instale o app para uso offline!</span>
+        <button id="btn-install-pwa" style="background: white; color: #00539B; border: none; padding: 8px 16px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 12px;">Instalar</button>
+    </div>
+
+    <div class="info-card">
+        <span id="lbl_tarifa">&#127903; Tarifa Metrô/CPTM: Carregando...</span>
+        <span id="lbl_horario">&#9200; Operação: Carregando...</span>
+    </div>
+
+    <div class="quick-services" role="navigation">
+        <button class="btn-service" aria-label="Abrir mapa offline" onclick="abrirModal('modalMapa')">
+            <span class="icon-service" aria-hidden="true">🗺️</span>
+            <span id="lbl_btn_mapa">Mapa Offline</span>
+        </button>
+        
+        <button class="btn-service btn-samu" aria-label="Ligar para o SAMU 192" onclick="window.location.href='tel:192'">
+            <span class="icon-service" aria-hidden="true">🚑</span> 
+            <span id="lbl_btn_samu" class="lbl-destaque">SAMU (192)</span>
+            <span id="lbl_samu_sub" style="font-size:10px; font-weight:normal;" class="lbl-destaque">Mal súbito/Acidentes</span>
+        </button>
+
+        <button class="btn-service" aria-label="Status das Linhas" onclick="abrirModalStatus()">
+            <span class="icon-service" aria-hidden="true">🚦</span>
+            <span id="lbl_btn_status">Status Linhas</span>
+        </button>
+
+        <button class="btn-service" aria-label="Enviar SMS de denúncia para o Metrô" onclick="window.location.href='sms:+5511973332252'">
+            <span class="icon-service" aria-hidden="true">📱</span> 
+            <span id="lbl_btn_denuncia_metro">SMS Metrô</span>
+            <span id="lbl_denuncia_sub" style="font-size:10px; color:var(--secundary); font-weight:normal;">Assédio/Roubo</span>
+        </button>
+
+        <button class="btn-service" aria-label="Denúncia CPTM via WhatsApp" onclick="window.open('https://wa.me/5511997677030', '_blank')">
+            <span class="icon-service" aria-hidden="true">💬</span> 
+            <span id="lbl_btn_denuncia_cptm" style="font-size: 13px;">WhatsApp CPTM</span>
+            <span id="lbl_wpp_sub" style="font-size:11px; color:var(--secundary); font-weight:normal;">Comércio irregular, som alto</span>
+        </button>
+    </div>
+
+    <!-- NOVO HTML DA BARRA DE PESQUISA APLICADO -->
+    <div class="address-box">
+        <h4 id="lbl_busca_titulo">&#128269; Não sabe a estação? Digite o endereço:</h4>
+        <div class="address-input-group">
+            <div class="input-mic-wrapper">
+                <input type="text" id="input_endereco" placeholder="Ex: Rua Paes Leme, 215">
+                <button id="btn_voz" class="btn-voz-inside" onclick="iniciarBuscaPorVoz()" title="Buscar por voz">🎤</button>
+            </div>
+            <button id="btn_buscar_end" class="btn-search-address" onclick="buscarEndereco()">Buscar Endereço</button>
+        </div>
+        <div id="resultado_endereco" class="address-result" aria-live="polite"></div>
+    </div>
+    
+       <div class="form-group">
+        <label id="lbl_origem" for="input_origem">De onde você vai sair?</label>
+        <div class="input-with-gps">
+            <input type="text" id="input_origem" class="route-input" list="estacoes_origem" placeholder="Digite ou selecione a estação...">
+            <datalist id="estacoes_origem"></datalist>
+            <button id="btn_gps" class="btn-gps" onclick="usarGPS()">&#128205;</button>
+        </div>
+    </div>
+    
+       <div class="swap-container">
+        <button class="btn-swap" onclick="inverterEstacoes()">&#8597;</button>
+    </div>
+
+    <div class="form-group">
+        <label id="lbl_destino" for="input_destino">Para onde você vai?</label>
+        <input type="text" id="input_destino" class="route-input" list="estacoes_destino" placeholder="Digite ou selecione a estação...">
+        <datalist id="estacoes_destino"></datalist>
+    </div>
+
+    
+    <button id="btn_tracar" class="btn-main" onclick="calcularRota()">Traçar Melhor Caminho</button>
+    
+    <div id="resultado" class="result-box" aria-live="polite">
+        <div id="tempo-estimado" class="time-box"></div>
+        <div id="aviso-integracao" class="alert-box"></div>
+        
+        <h3 id="lbl_roteiro" style="margin-top:0; font-size: 16px;">&#128205; Rota Mais Inteligente:</h3>
+        <div id="rota-passos"></div>
+        
+        <div class="action-buttons-row">
+            <button id="btn_share" class="btn-action btn-share" onclick="compartilharRota()">&#128228; Compartilhar</button>
+            <button id="btn_uber" class="btn-action btn-uber" onclick="chamarUber()"></button>
+        </div>
+        
+        <div id="arredores-container" class="tourist-box">
+            <button id="btn_arredores" class="btn-expand" onclick="toggleArredores()">
+                &#128506; O que há nas proximidades? <span>&#9660;</span>
+            </button>
+            <div id="poi-detalhes" class="poi-content"></div>
+        </div>
+    </div>
+
+    <div class="adsense-safe-container" style="margin-top: 25px; text-align: center; min-height: 50px;">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4214198784813383" crossorigin="anonymous"></script>
+    </div>
+    
+  <!-- 🧠 ACORDEÃO DE SEO (ADSENSE) -->
+    <style> summary.seo-escondido::-webkit-details-marker { display: none; } </style>
+    <details style="margin-top: 10px; padding: 0; text-align: justify; font-size: 10px; color: var(--secundary); opacity: 0.6;">
+      <summary id="seo_titulo" class="seo-escondido" style="text-align: center; cursor: pointer; outline: none; user-select: none; list-style: none;">
+        Informações Técnicas do Sistema
+      </summary>
+      <div id="seo_texto" style="padding-top: 10px; line-height: 1.4; cursor: default;" onclick="event.stopPropagation();">
+        <p>O <strong>SP Trilhos</strong> é um aplicativo web progressivo de utilidade pública projetado para simplificar a navegação dos cidadãos e turistas pela malha de transporte sobre trilhos da Região Metropolitana de São Paulo. O aplicativo fornece ferramentas inteligentes baseadas em algoritmos de grafos para calcular de forma otimizada a melhor rota de viagem entre qualquer ponto de partida e destino final.</p>
+        
+        <p>Nossa plataforma oferece suporte de geolocalização e mapas para todas as linhas operadas pelas diferentes concessionárias paulistas. Planeje seu trajeto e confira conexões integradas para a <strong>Linha 1-Azul</strong>, <strong>Linha 2-Verde</strong>, <strong>Linha 3-Vermelha</strong>, <strong>Linha 4-Amarela</strong>, <strong>Linha 5-Lilás</strong>, além de todas as linhas metropolitanas da CPTM como a <strong>Linha 7-Rubi</strong>, <strong>Linha 11-Coral</strong>, <strong>Linha 12-Safira</strong> e os serviços da ViaMobilidade como a <strong>Linha 8-Diamante</strong> e a <strong>Linha 9-Esmeralda</strong>. Com o uso do GPS integrado, o sistema rastreia as coordenadas geográficas do usuário para apontar instantaneamente qual é a estação mais próxima de sua localização atual, calculando rotas híbridas a pé ou integradas com serviços de aplicativo.</p>
+        
+        <p>O grande diferencial do aplicativo é o seu sistema de inteligência comunitária. Os próprios passageiros que estão vivenciando a operação no dia a dia podem enviar alertas de mau funcionamento, como Velocidade Reduzida ou Trem/Metrô Parado. Para evitar relatos falsos, o sistema conta com uma lógica avançada de geofencing de segurança em nuvem, validando se o usuário está de fato dentro da área geográfica das linhas antes de consolidar seu relatório. Quando o quórum de relatos válidos é atingido na mesma linha dentro de uma janela de tempo, um alerta comunitário em tempo real é publicado no topo da tela do aplicativo para avisar aos milhares de outros usuários.</p>
+        
+        <p>Desenvolvido sob o padrão de PWA, o SP Trilhos armazena seus recursos estáticos em cache local no navegador por meio de Service Workers, permitindo que você consulte mapas metropolitanos e calcule trajetos mesmo se estiver em subsolos ou túneis sem conexão de internet. O sistema opera de forma independente, coletando dados de status oficial através de portais públicos e unificando-os para oferecer uma experiência de mobilidade urbana fluida, transparente e ágil.</p>
+      </div>
+    </details>
+    <!-- FIM DO ACORDEÃO DE SEO -->
+    
+    <div id="aviso_legal_box" style="text-align: center; margin-top: 15px; padding-top: 15px; border-top: 1px solid #e5e5ea; font-size: 11px; color: var(--secundary); line-height: 1.5;">
+        <!-- Injetado via JS -->
+    </div>
+  
+</div>
+
+<div id="toast"></div>
+
+<!-- MODAL MAPA -->
+<div id="modalMapa" class="modal-overlay">
+    <div class="modal-header">
+        <span id="lbl_titulo_mapa" style="flex: 1; font-weight:bold;">Mapa Metropolitano</span>
+        <button id="btn_voltar_mapa" class="btn-fechar-modal" onclick="fecharModal()">&#11013; Voltar</button>
+    </div>
+    <div class="mapa-actions">
+        <a id="btn_salvar_mapa" href="mapa_sp.jpg" download="Mapa_Metro_SP.jpg" class="btn-download">&#128229; Salvar Imagem na Galeria</a>
+    </div>
+    <div class="mapa-container" id="containerMapa">
+        <img id="imgMapa" src="mapa_sp.jpg" alt="Mapa Metrô SP">
+    </div>
+    <div class="zoom-controls">
+        <button class="btn-zoom" onclick="alterarZoom(50)">+</button>
+        <button class="btn-zoom" onclick="alterarZoom(-50)">-</button>
+    </div>
+</div>
+
+<!-- MODAL STATUS -->
+<div id="modalStatus" class="modal-overlay">
+    <div class="modal-header">
+        <span id="lbl_titulo_status" style="flex: 1; font-weight: bold;">Status das Linhas</span>
+        <button onclick="carregarStatusLinhas()" style="background:none; border:none; font-size:22px; cursor:pointer; color: white; margin-right: 10px;">🔄</button>
+        <button id="btn_voltar_status" class="btn-fechar-modal" onclick="fecharModal()">&#11013; Voltar</button>
+    </div>
+    <div style="background: var(--card-bg); padding: 8px; text-align: center; font-size: 11px; color: var(--secundary); border-bottom: 1px solid #e5e5ea;">
+        <span id="lbl_last_update">Última atualização:</span> <span id="hora_atualizacao_status">--:--</span>
+    </div>
+    <div class="status-container" id="lista-status"></div>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
