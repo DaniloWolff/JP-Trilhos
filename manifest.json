@@ -1,7 +1,7 @@
 {
-  "id": "/metro-sp-app",
-  "name": "Metro SP",
-  "short_name": "Metro SP",
+  "id": "/metro-jp-app",
+  "name": "Metro JP",
+  "short_name": "Metro JP",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f0f2f5",
@@ -10,7 +10,7 @@
   "lang": "pt-BR",
   "dir": "ltr",
   "categories": ["navigation", "travel"],
-  "description": "Guia rápido, leve e offline do Metrô e CPTM de São Paulo",
+  "description": "Guia rápido, leve e offline do Metrô de Tokyo e Osaka",
   "icons": [
     {
       "src": "icon-192.png",
