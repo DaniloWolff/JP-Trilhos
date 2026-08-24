@@ -1,8 +1,0 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "dev.pages.sp_trilhos.twa",
-        "sha256_cert_fingerprints": ["68:57:F7:76:8D:05:EA:01:B6:D9:B1:01:D2:68:79:04:32:18:98:57:D5:19:28:0F:E1:B6:D7:94:FD:4E:6F:C1"]
-      }
-    }]
