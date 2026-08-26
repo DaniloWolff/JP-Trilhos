@@ -1400,7 +1400,7 @@ async function carregarMapaSVG() {
         svgElement.style.height = '100%';
         svgElement.style.display = 'block';
         
-        // 1. ATIVAR O PANZOOM (A parte que eu tinha esquecido!)
+        // 1. ATIVAR O PANZOOM
         const panzoom = Panzoom(svgElement, {
             maxScale: 6,
             minScale: 1,
@@ -1411,37 +1411,95 @@ async function carregarMapaSVG() {
         // 2. PERMITE DAR ZOOM COM A RODINHA DO MOUSE
         container.addEventListener('wheel', panzoom.zoomWithWheel);
 
-        // 3. FERRAMENTA DE MAPEAR COORDENADAS (Para você criar as estações)
+        // 3. FERRAMENTA DE MAPEAR COORDENADAS (Caso precise no futuro)
         svgElement.addEventListener('click', (e) => {
+            if(e.target.tagName === 'circle') return; // Ignora se clicar numa bolinha de estação
             const pt = svgElement.createSVGPoint();
             pt.x = e.clientX;
             pt.y = e.clientY;
             const svgP = pt.matrixTransform(svgElement.getScreenCTM().inverse());
-            
-            const cx = Math.round(svgP.x);
-            const cy = Math.round(svgP.y);
-
-                        const codigoPronto = `
-    <g class="estacao" data-nome="NOME_AQUI" style="cursor: pointer;">
-        <circle cx="${cx}" cy="${cy}" r="4" fill="transparent" class="ponto-toque" />
-        <circle cx="${cx}" cy="${cy}" r="1.5" fill="#COR_AQUI" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-    </g>`;
-            console.log("📍 Clique detectado! Copie o código abaixo:");
-            console.log(codigoPronto);
+            console.log(`Coordenada: cx="${Math.round(svgP.x)}" cy="${Math.round(svgP.y)}"`);
         });
 
-        // 4. ATIVA OS CLIQUES DE ORIGEM/DESTINO (Se você já tiver essa função)
-        if (typeof configurarCliquesNoMapa === 'function') {
-            configurarCliquesNoMapa();
-        }
+        // ========================================================
+        // 4. A MÁGICA DOS CLIQUES NAS BOLINHAS DO SVG
+        // ========================================================
+        const textos = Array.from(svgElement.querySelectorAll('.estacao-btn'));
+        const circulos = svgElement.querySelectorAll('circle');
+
+        // Guarda as cores originais caso a gente precise restaurar
+        circulos.forEach(c => {
+            if (!c.dataset.corOriginal) c.dataset.corOriginal = c.style.fill || c.getAttribute('fill');
+        });
+
+        circulos.forEach(circulo => {
+            circulo.addEventListener('click', (e) => {
+                e.stopPropagation(); // Evita que clique no mapa geral
+                
+                const cx = parseFloat(circulo.getAttribute('cx'));
+                const cy = parseFloat(circulo.getAttribute('cy'));
+                if (isNaN(cx) || isNaN(cy)) return;
+
+                let textoMaisProximo = null;
+                let menorDistancia = Infinity;
+
+                // Acha qual texto da estação está fisicamente colado nessa bolinha
+                textos.forEach(txt => {
+                    const tx = parseFloat(txt.getAttribute('x'));
+                    const ty = parseFloat(txt.getAttribute('y'));
+                    if (isNaN(tx) || isNaN(ty)) return;
+
+                    const dx = cx - tx;
+                    const dy = cy - ty;
+                    const distancia = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distancia < menorDistancia) {
+                        menorDistancia = distancia;
+                        textoMaisProximo = txt;
+                    }
+                });
+
+                if (textoMaisProximo) {
+                    // Limpa o nome (tira os asteriscos e espaços)
+                    let nomeEstacao = textoMaisProximo.textContent.trim().replace(/\*+$/, '').trim();
+                    
+                    // Integra com a sua lógica de rotas
+                    const inputOrigem = document.getElementById('input_origem');
+                    const inputDestino = document.getElementById('input_destino');
+                    
+                    if (inputOrigem.value === '' || (inputOrigem.value !== '' && inputDestino.value !== '')) {
+                        // SETAR ORIGEM
+                        inputOrigem.value = nomeEstacao;
+                        inputDestino.value = '';
+                        
+                        // Restaura todas as bolinhas e pinta a clicada de Verde
+                        circulos.forEach(c => c.style.fill = c.dataset.corOriginal);
+                        circulo.style.fill = '#00FF00'; // Verde
+                        
+                        if(typeof showToast === 'function') showToast(`📍 Origem: ${nomeEstacao}`);
+                        if(typeof dispararVibracao === 'function') dispararVibracao(50);
+                        
+                    } else if (inputOrigem.value !== '' && inputDestino.value === '') {
+                        // SETAR DESTINO
+                        inputDestino.value = nomeEstacao;
+                        
+                        circulo.style.fill = '#FF0000'; // Vermelho
+                        
+                        if(typeof showToast === 'function') showToast(`🏁 Destino: ${nomeEstacao}`);
+                        if(typeof dispararVibracao === 'function') dispararVibracao(50);
+                        
+                        // Fecha o mapa e calcula a rota após 0.5s
+                        setTimeout(() => {
+                            if(typeof fecharModal === 'function') fecharModal(); 
+                            if(typeof calcularRota === 'function') calcularRota();
+                        }, 500);
+                    }
+                }
+            });
+        });
     }
   } catch (error) {
     console.error('Erro ao carregar o mapa:', error);
     document.getElementById('containerMapa').innerHTML = '<p style="text-align:center; color:red;">Erro ao carregar o mapa.</p>';
   }
 }
-
-// Inicializa assim que a página carrega
-document.addEventListener('DOMContentLoaded', () => {
-  carregarMapaSVG();
-});
