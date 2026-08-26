@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // A URL do seu Cloudflare Worker
-const BACKEND_URL = "dry-morning-54de.danilolealwolff.workers.dev"; 
+const BACKEND_URL = "https://dry-morning-54de.danilolealwolff.workers.dev"; 
 const CONFIG_APP = {
     nomeCidade: "Metrô JP",
     linkPlayStore: "https://play.google.com/store/apps/details?id=dev.pages.jp_trilhos.twa" 
