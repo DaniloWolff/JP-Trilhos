@@ -516,4 +516,55 @@
     });
     // ]]>
   </script>
+
+    <script type="text/javascript">
+    // <![CDATA[
+    document.addEventListener('DOMContentLoaded', () => {
+      // Pega todos os textos que têm a classe estacao-btn
+      const textos = Array.from(document.querySelectorAll('.estacao-btn'));
+      const circulos = document.querySelectorAll('circle');
+
+      circulos.forEach(circulo => {
+        circulo.addEventListener('click', (e) => {
+          // Pega as coordenadas X e Y da bolinha clicada
+          const cx = parseFloat(circulo.getAttribute('cx'));
+          const cy = parseFloat(circulo.getAttribute('cy'));
+          
+          if (isNaN(cx) || isNaN(cy)) return;
+
+          let textoMaisProximo = null;
+          let menorDistancia = Infinity;
+
+          // Procura qual é o texto que está fisicamente mais perto dessa bolinha
+          textos.forEach(txt => {
+            const tx = parseFloat(txt.getAttribute('x'));
+            const ty = parseFloat(txt.getAttribute('y'));
+            
+            if (isNaN(tx) || isNaN(ty)) return;
+
+            // Cálculo matemático de distância (Teorema de Pitágoras)
+            const dx = cx - tx;
+            const dy = cy - ty;
+            const distancia = Math.sqrt(dx * dx + dy * dy);
+
+            if (distancia < menorDistancia) {
+              menorDistancia = distancia;
+              textoMaisProximo = txt;
+            }
+          });
+
+          // Se achou o texto, dispara a ação
+          if (textoMaisProximo) {
+            // Limpa o nome (tira espaços extras e aqueles asteriscos da legenda)
+            let nomeDaEstacao = textoMaisProximo.textContent.trim().replace(/\*+$/, '').trim();
+            
+            console.log('Estação clicada:', nomeDaEstacao);
+            alert('Você selecionou a estação: ' + nomeDaEstacao);
+          }
+        });
+      });
+    });
+    // ]]>
+  </script>
+  
 </svg>
