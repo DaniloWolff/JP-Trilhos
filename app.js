@@ -1381,3 +1381,53 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+// ===========================
+// CARREGAMENTO DO MAPA SVG EXTERNO
+// ===========================
+
+async function carregarMapaSVG() {
+  try {
+    // Busca o arquivo mapa.svg que está na sua pasta
+    const response = await fetch('mapa.svg');
+    
+    if (!response.ok) {
+      throw new Error('Falha ao carregar o arquivo SVG');
+    }
+    
+    const svgText = await response.text();
+    
+    // Injeta o SVG dentro do container no HTML
+    const container = document.getElementById('containerMapa');
+    container.innerHTML = svgText;
+    
+    // Pega o SVG que acabou de ser injetado para garantir os estilos do Panzoom
+    const svgElement = container.querySelector('svg');
+    if (svgElement) {
+        svgElement.setAttribute('id', 'mapa-svg');
+        svgElement.style.width = '100%';
+        svgElement.style.height = '100%';
+        svgElement.style.display = 'block';
+        svgElement.style.touchAction = 'none';
+    }
+
+    // AGORA SIM, com o SVG na tela, ativamos os cliques nas estações!
+    configurarCliquesNoMapa();
+    
+  } catch (error) {
+    console.error('Erro ao carregar o mapa:', error);
+    document.getElementById('containerMapa').innerHTML = '<p style="text-align:center; color:red;">Erro ao carregar o mapa interativo.</p>';
+  }
+}
+
+// ===========================
+// INICIALIZAÇÃO QUANDO A PÁGINA CARREGA
+// ===========================
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Carrega o SVG externo assim que o app abrir
+  carregarMapaSVG();
+  
+  // (Suas outras chamadas que já ficavam aqui no DOMContentLoaded)
+});
+
