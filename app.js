@@ -1491,6 +1491,3 @@ async function carregarMapaSVG() {
 document.addEventListener("DOMContentLoaded", () => {
     carregarMapaSVG();
 });
-
-    
-}
