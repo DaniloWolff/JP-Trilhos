@@ -14,6 +14,56 @@
     <link rel="icon" type="image/png" href="icon-192.png">
     <link rel="apple-touch-icon" href="icon-192.png">
 
+<!-- Import do Motor de Zoom -->
+<script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
+
+<style>
+/* Container do Mapa */
+#mapa-svg-wrapper {
+  width: 100%;
+  height: 450px; /* Altura ideal para mobile e desktop */
+  overflow: hidden;
+  background-color: #f5f5f5; /* Cor de fundo do mapa */
+  border-radius: 12px;
+  position: relative;
+  touch-action: none; /* Previne o scroll da página enquanto arrasta o mapa */
+}
+
+/* Animações suaves para as bolinhas */
+.ponto-visual {
+  transition: all 0.3s ease;
+}
+
+/* Efeito ao passar o mouse (para quem usa Web/PC) */
+.estacao:hover .ponto-visual {
+  r: 10px; /* Aumenta a bolinha */
+  stroke-width: 3px;
+}
+
+/* Efeito visual ao passar o mouse ou clicar */
+.estacao:hover .ponto-visual {
+    r: 10;
+    transition: r 0.2s ease;
+}
+
+.estacao .ponto-visual {
+    transition: all 0.3s ease;
+}
+
+/* Classes que o JavaScript vai injetar ao clicar */
+.estacao.origem .ponto-visual {
+    fill: #00FF00 !important; /* Verde */
+    r: 12 !important;
+}
+
+.estacao.destino .ponto-visual {
+    fill: #FF0000 !important; /* Vermelho */
+    r: 12 !important;
+}
+    
+</style>
+
+    
     <style>
         :root {
             --bg-color: #f0f2f5; --card-bg: #ffffff; --text-color: #1d1d1f;
@@ -274,6 +324,37 @@
         <span id="lbl_horario">&#9200; Operação: Carregando...</span>
     </div>
 
+
+    <div id="mapa-svg-wrapper">
+  <div id="mapa-metro" style="width: 100%; height: 100%;">
+    <!-- COLOQUE TODO O SEU CÓDIGO DO ARQUIVO <svg> AQUI DENTRO -->
+<g id="camada-interativa">
+    
+    <!-- Estação Sé (Teste) -->
+    <g class="estacao" data-nome="Sé" style="cursor: pointer;">
+        <!-- Bolha invisível de 44px (Fat Finger) -->
+        <circle cx="600" cy="500" r="22" fill="transparent" class="ponto-toque" />
+        <!-- Bolinha visual Azul -->
+        <circle cx="600" cy="500" r="6" fill="#00539B" stroke="#ffffff" stroke-width="2" class="ponto-visual" />
+    </g>
+
+    <!-- Estação Luz (Teste) -->
+    <g class="estacao" data-nome="Luz" style="cursor: pointer;">
+        <circle cx="600" cy="400" r="22" fill="transparent" class="ponto-toque" />
+        <circle cx="600" cy="400" r="6" fill="#F0D100" stroke="#ffffff" stroke-width="2" class="ponto-visual" />
+    </g>
+
+    <!-- Estação Paraíso (Teste) -->
+    <g class="estacao" data-nome="Paraíso" style="cursor: pointer;">
+        <circle cx="600" cy="600" r="22" fill="transparent" class="ponto-toque" />
+        <circle cx="600" cy="600" r="6" fill="#008061" stroke="#ffffff" stroke-width="2" class="ponto-visual" />
+    </g>
+
+</g>
+      
+      
+  </div>
+</div>
     <div class="quick-services" role="navigation">
         <button class="btn-service" aria-label="Abrir mapa offline" onclick="abrirModal('modalMapa')">
             <span class="icon-service" aria-hidden="true">🗺️</span>
