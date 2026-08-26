@@ -1268,7 +1268,7 @@ async function enviarReporteParaBackend(linha, tipo, latUser, lonUser) {
 
 document.getElementById('aviso_legal_box').innerHTML = dicionario[idiomaAtual].aviso_legal;
 
-// FERRAMENTA DE MAPEAMENTO (Apague depois de terminar)
+// FERRAMENTA DE MAPEAMENTO
 const svg = document.querySelector('svg');
 
 svg.addEventListener('click', (e) => {
@@ -1295,3 +1295,62 @@ svg.addEventListener('click', (e) => {
     alert(`Coordenadas capturadas: CX: ${cx}, CY: ${cy}. Veja o console! (F12)`);
 });
 
+// ==========================================
+// CÉREBRO DO MAPA INTERATIVO (CLIQUES)
+// ==========================================
+function configurarCliquesNoMapa() {
+    // Pega todas as estações que criamos no SVG
+    const estacoesMapa = document.querySelectorAll('.estacao');
+    
+    estacoesMapa.forEach(estacaoEl => {
+        estacaoEl.addEventListener('click', function(e) {
+            // Isso evita que a ferramenta de mapeamento dispare junto
+            e.stopPropagation(); 
+            
+            // Pega o nome da estação que está no data-nome="Luz"
+            const nomeEstacao = this.getAttribute('data-nome');
+            const inputOrigem = document.getElementById('input_origem');
+            const inputDestino = document.getElementById('input_destino');
+            
+            // LÓGICA DE CLIQUE:
+            // Se a origem estiver vazia OU se ambos já estiverem preenchidos (novo ciclo)
+            if (inputOrigem.value === '' || (inputOrigem.value !== '' && inputDestino.value !== '')) {
+                
+                inputOrigem.value = nomeEstacao; // Seta a Origem
+                inputDestino.value = '';         // Limpa o Destino
+                
+                // Remove as cores antigas de todas as estações no mapa
+                estacoesMapa.forEach(el => el.classList.remove('origem', 'destino'));
+                
+                // Pinta essa estação de Verde (classe .origem que tá no seu CSS)
+                this.classList.add('origem');
+                
+                // Feedback pro usuário
+                showToast(`📍 Origem definida: ${nomeEstacao}`);
+                dispararVibracao(50);
+                
+            } 
+            // Se já tem origem, mas não tem destino
+            else if (inputOrigem.value !== '' && inputDestino.value === '') {
+                
+                inputDestino.value = nomeEstacao; // Seta o Destino
+                
+                // Pinta essa estação de Vermelho (classe .destino que tá no seu CSS)
+                this.classList.add('destino');
+                showToast(`🏁 Destino definido: ${nomeEstacao}`);
+                dispararVibracao(50);
+                
+                // Aguarda meio segundo pro usuário ver a bolinha vermelha e calcula a rota!
+                setTimeout(() => {
+                    fecharModal(); // Fecha o mapa (sua função nativa)
+                    calcularRota(); // Traça o caminho (sua função nativa)
+                }, 500);
+            }
+        });
+    });
+}
+
+// Inicializa o cérebro do mapa assim que o app carrega
+document.addEventListener("DOMContentLoaded", () => {
+    configurarCliquesNoMapa();
+});
