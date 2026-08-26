@@ -61,6 +61,17 @@
     r: 12 !important;
 }
     
+/* Ignora as caixas dos textos que ficam sobrepondo o mapa */
+text {
+    pointer-events: none;
+}
+      
+/* Garante que TODAS as bolinhas recebam os cliques e fiquem com a mãozinha */
+circle {
+    pointer-events: auto;
+    cursor: pointer;
+}
+  
 </style>
 
     
