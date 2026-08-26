@@ -1421,12 +1421,11 @@ async function carregarMapaSVG() {
             const cx = Math.round(svgP.x);
             const cy = Math.round(svgP.y);
 
-            const codigoPronto = `
+                        const codigoPronto = `
     <g class="estacao" data-nome="NOME_AQUI" style="cursor: pointer;">
-        <circle cx="${cx}" cy="${cy}" r="22" fill="transparent" class="ponto-toque" />
-        <circle cx="${cx}" cy="${cy}" r="6" fill="#COR_AQUI" stroke="#ffffff" stroke-width="2" class="ponto-visual" />
+        <circle cx="${cx}" cy="${cy}" r="4" fill="transparent" class="ponto-toque" />
+        <circle cx="${cx}" cy="${cy}" r="1.5" fill="#COR_AQUI" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
     </g>`;
-
             console.log("📍 Clique detectado! Copie o código abaixo:");
             console.log(codigoPronto);
         });
