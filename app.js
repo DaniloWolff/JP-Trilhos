@@ -1355,7 +1355,6 @@ function configurarCliquesNoMapa() {
 // APLICANDO EVENTOS COM SEGURANÇA
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
-    configurarCliquesNoMapa();
 
     // FERRAMENTA DE MAPEAMENTO (Aguardando o DOM carregar para evitar erro)
     const svg = document.getElementById('mapa-svg');
