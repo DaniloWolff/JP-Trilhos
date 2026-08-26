@@ -1267,3 +1267,31 @@ async function enviarReporteParaBackend(linha, tipo, latUser, lonUser) {
 }
 
 document.getElementById('aviso_legal_box').innerHTML = dicionario[idiomaAtual].aviso_legal;
+
+// FERRAMENTA DE MAPEAMENTO (Apague depois de terminar)
+const svg = document.querySelector('svg');
+
+svg.addEventListener('click', (e) => {
+    // Calcula a posição real do clique em relação ao viewBox (1200x1000)
+    const pt = svg.createSVGPoint();
+    pt.x = e.clientX;
+    pt.y = e.clientY;
+    const svgP = pt.matrixTransform(svg.getScreenCTM().inverse());
+    
+    const cx = Math.round(svgP.x);
+    const cy = Math.round(svgP.y);
+
+    // Gera o código XML certinho para você copiar!
+    const codigoPronto = `
+    <g class="estacao" data-nome="NOME_AQUI" style="cursor: pointer;">
+        <circle cx="${cx}" cy="${cy}" r="22" fill="transparent" class="ponto-toque" />
+        <circle cx="${cx}" cy="${cy}" r="6" fill="#COR_AQUI" stroke="#ffffff" stroke-width="2" class="ponto-visual" />
+    </g>`;
+
+    console.log("📍 Clique detectado! Copie o código abaixo:");
+    console.log(codigoPronto);
+    
+    // Alerta visual imediato no meio da tela para você ver que funcionou
+    alert(`Coordenadas capturadas: CX: ${cx}, CY: ${cy}. Veja o console! (F12)`);
+});
+
