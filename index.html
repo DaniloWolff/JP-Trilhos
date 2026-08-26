@@ -238,8 +238,8 @@
         .btn-fechar-modal { background: #ff3b30; color: white; border: none; padding: 8px 15px; border-radius: 20px; font-weight: bold; cursor: pointer; }
         .mapa-actions { padding: 12px; width: 100%; box-sizing: border-box; background: #fbfbfd; text-align: center; border-bottom: 1px solid #ddd; }
         .btn-download { background: var(--offline-green); color: white; text-decoration: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; display: inline-block; box-shadow: 0 2px 5px rgba(0,0,0,0.1); width: 80%; }
-        .mapa-container { flex: 1; overflow: auto; background: #e5e5ea; position: relative; -webkit-overflow-scrolling: touch; }
-        #imgMapa { width: 100%; height: auto; display: block; transition: width 0.2s ease-out; }
+        .mapa-container { flex: 1; overflow: hidden; background: #e5e5ea; position: relative; -webkit-overflow-scrolling: touch; display: flex; align-items: center; justify-content: center;}
+        
         .zoom-controls { position: fixed; bottom: 30px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 1100; }
         .btn-zoom { width: 50px; height: 50px; border-radius: 50%; background: #1d1d1f; color: white; font-size: 28px; border: 2px solid white; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; }
         
@@ -324,37 +324,6 @@
         <span id="lbl_horario">&#9200; Operação: Carregando...</span>
     </div>
 
-
-    <div id="mapa-svg-wrapper">
-  <div id="mapa-metro" style="width: 100%; height: 100%;">
-    <!-- COLOQUE TODO O SEU CÓDIGO DO ARQUIVO <svg> AQUI DENTRO -->
-<g id="camada-interativa">
-    
-    <!-- Estação Sé (Teste) -->
-    <g class="estacao" data-nome="Sé" style="cursor: pointer;">
-        <!-- Bolha invisível de 44px (Fat Finger) -->
-        <circle cx="600" cy="500" r="22" fill="transparent" class="ponto-toque" />
-        <!-- Bolinha visual Azul -->
-        <circle cx="600" cy="500" r="6" fill="#00539B" stroke="#ffffff" stroke-width="2" class="ponto-visual" />
-    </g>
-
-    <!-- Estação Luz (Teste) -->
-    <g class="estacao" data-nome="Luz" style="cursor: pointer;">
-        <circle cx="600" cy="400" r="22" fill="transparent" class="ponto-toque" />
-        <circle cx="600" cy="400" r="6" fill="#F0D100" stroke="#ffffff" stroke-width="2" class="ponto-visual" />
-    </g>
-
-    <!-- Estação Paraíso (Teste) -->
-    <g class="estacao" data-nome="Paraíso" style="cursor: pointer;">
-        <circle cx="600" cy="600" r="22" fill="transparent" class="ponto-toque" />
-        <circle cx="600" cy="600" r="6" fill="#008061" stroke="#ffffff" stroke-width="2" class="ponto-visual" />
-    </g>
-
-</g>
-      
-      
-  </div>
-</div>
     <div class="quick-services" role="navigation">
         <button class="btn-service" aria-label="Abrir mapa offline" onclick="abrirModal('modalMapa')">
             <span class="icon-service" aria-hidden="true">🗺️</span>
@@ -480,7 +449,33 @@
         <a id="btn_salvar_mapa" href="mapa_sp.jpg" download="Mapa_Metro_SP.jpg" class="btn-download">&#128229; Salvar Imagem na Galeria</a>
     </div>
     <div class="mapa-container" id="containerMapa">
-        <img id="imgMapa" src="mapa_sp.jpg" alt="Mapa Metrô SP">
+        
+        <!-- O SEU MAPA SVG FOI INTEGRADO AQUI DENTRO DO MODAL -->
+        <svg id="mapa-svg" viewBox="0 0 1200 1000" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%; display: block; touch-action: none;">
+            <g id="camada-interativa">
+                <!-- Estação Sé (Teste) -->
+                <g class="estacao" data-nome="Sé" style="cursor: pointer;">
+                    <circle cx="600" cy="500" r="22" fill="transparent" class="ponto-toque" />
+                    <circle cx="600" cy="500" r="6" fill="#00539B" stroke="#ffffff" stroke-width="2" class="ponto-visual" />
+                </g>
+
+                <!-- Estação Luz (Teste) -->
+                <g class="estacao" data-nome="Luz" style="cursor: pointer;">
+                    <circle cx="600" cy="400" r="22" fill="transparent" class="ponto-toque" />
+                    <circle cx="600" cy="400" r="6" fill="#F0D100" stroke="#ffffff" stroke-width="2" class="ponto-visual" />
+                </g>
+
+                <!-- Estação Paraíso (Teste) -->
+                <g class="estacao" data-nome="Paraíso" style="cursor: pointer;">
+                    <circle cx="600" cy="600" r="22" fill="transparent" class="ponto-toque" />
+                    <circle cx="600" cy="600" r="6" fill="#008061" stroke="#ffffff" stroke-width="2" class="ponto-visual" />
+                </g>
+                
+                <!-- COPIE E COLE AS SUAS OUTRAS ESTAÇÕES AQUI DENTRO NO FUTURO -->
+                
+            </g>
+        </svg>
+
     </div>
     <div class="zoom-controls">
         <button class="btn-zoom" onclick="alterarZoom(50)">+</button>
