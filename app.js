@@ -1382,17 +1382,12 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ===========================
-// CARREGAMENTO DO MAPA SVG EXTERNO
+// CARREGAMENTO DO MAPA SVG EXTERNO E ZOOM
 // ===========================
 async function carregarMapaSVG() {
   try {
-    // Atenção: O Cloudflare faz diferença entre maiúsculas e minúsculas! 
-    // Garanta que o arquivo salvo está exatamente como mapa.svg (tudo minúsculo)
     const response = await fetch('mapa.svg');
-    
-    if (!response.ok) {
-      throw new Error('Falha ao carregar o arquivo SVG');
-    }
+    if (!response.ok) throw new Error('Falha ao carregar o arquivo SVG');
     
     const svgText = await response.text();
     const container = document.getElementById('containerMapa');
@@ -1404,14 +1399,19 @@ async function carregarMapaSVG() {
         svgElement.style.width = '100%';
         svgElement.style.height = '100%';
         svgElement.style.display = 'block';
-        svgElement.style.touchAction = 'none';
-    }
+        
+        // 1. ATIVAR O PANZOOM (A parte que eu tinha esquecido!)
+        const panzoom = Panzoom(svgElement, {
+            maxScale: 6,
+            minScale: 1,
+            step: 0.3,
+            contain: 'outside'
+        });
 
-    // 1. Ativa os cliques de origem/destino nas estações
-    configurarCliquesNoMapa();
-    
-    // 2. Ativa a ferramenta de captura de coordenadas (AGORA SIM FUNCIONA)
-    if (svgElement) {
+        // 2. PERMITE DAR ZOOM COM A RODINHA DO MOUSE
+        container.addEventListener('wheel', panzoom.zoomWithWheel);
+
+        // 3. FERRAMENTA DE MAPEAR COORDENADAS (Para você criar as estações)
         svgElement.addEventListener('click', (e) => {
             const pt = svgElement.createSVGPoint();
             pt.x = e.clientX;
@@ -1430,19 +1430,19 @@ async function carregarMapaSVG() {
             console.log("📍 Clique detectado! Copie o código abaixo:");
             console.log(codigoPronto);
         });
+
+        // 4. ATIVA OS CLIQUES DE ORIGEM/DESTINO (Se você já tiver essa função)
+        if (typeof configurarCliquesNoMapa === 'function') {
+            configurarCliquesNoMapa();
+        }
     }
-    
   } catch (error) {
     console.error('Erro ao carregar o mapa:', error);
-    document.getElementById('containerMapa').innerHTML = '<p style="text-align:center; color:red;">Erro ao carregar o mapa interativo.</p>';
+    document.getElementById('containerMapa').innerHTML = '<p style="text-align:center; color:red;">Erro ao carregar o mapa.</p>';
   }
 }
 
-// ===========================
-// INICIALIZAÇÃO QUANDO A PÁGINA CARREGA
-// ===========================
+// Inicializa assim que a página carrega
 document.addEventListener('DOMContentLoaded', () => {
-  // Carrega o SVG externo assim que o app abrir
   carregarMapaSVG();
 });
-
