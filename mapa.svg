@@ -3,137 +3,123 @@
    viewBox="0 0 364.33125 211.66668"
    style="width: 100%; height: 100%; display: block; touch-action: none;"
    version="1.1"
-   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
-   sodipodi:docname="Metro_Sao_Paulo_Futuro.svg"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:dc="http://purl.org/dc/elements/1.1/">
-  <defs id="defs2"></defs>
-  <g inkscape:label="Camada 1" inkscape:groupmode="layer" id="layer1" transform="translate(51.373913,-78.58665)">
-    <!-- FUNDO DO MAPA -->
-    <rect style="fill:#ffffff;fill-opacity:0.984314;" id="rect1" width="364.33124" height="211.66667" x="-51.373913" y="78.586647" rx="33.776661" ry="25.867125" />
-    <text xml:space="preserve" style="font-size:2.82222px;font-family:sans-serif;fill:#000000;" x="255.72299" y="83.945045" id="text4537-6-8-82-7-0-8-3-0-2" transform="rotate(45)"><tspan x="256.71518" y="83.945045">AACD - </tspan></text>
-    <rect style="fill:#f5f5ff;stroke:#000000;stroke-width:0.314655;" id="rect2108" width="67.537918" height="95.32354" x="-51.210545" y="194.69385" />
-    
-    <!-- LINHAS DESENHADAS (Mantidas originais) -->
-    <path style="fill:#0000ff;stroke:#a0a0a0;stroke-width:1.5;" d="m -41.852785,264.82789 h -6.45456" id="path14-9-8-5-6-3-5-1-2-6-0-3-2-9-8-1" />
-    <path style="fill:#000080;stroke:#aaaaaa;stroke-width:1.79194;" d="M -3.9415369,177.91389 -20.620262,177.6416" id="path14-9-8-7-3-7-2-8-7-7-2-1-1-1-4" />
-    <path style="fill:#0000ff;stroke:#0000db;stroke-width:1.5;" d="m 135.35865,102.61488 v 165" />
-    <path style="fill:#0000ff;stroke:#00caee;stroke-width:1.5;" d="m 158.6761,184.01515 78.39399,75.06206" />
+   xmlns="http://www.w3.org/2000/svg">
+   
+  <defs id="defs2">
+    <!-- Estilos para interatividade. Ao passar o mouse, a bolinha visual cresce levemente -->
+    <style>
+      .estacao { cursor: pointer; }
+      .estacao:hover .ponto-visual { transform: scale(1.5); transform-origin: center; transition: transform 0.2s ease; }
+      .nome-estacao { pointer-events: none; user-select: none; } /* Impede que o texto atrapalhe o clique */
+    </style>
+  </defs>
 
-    <!-- TEXTOS E NOMES DAS ESTAÇÕES (Mantidos originais) -->
-    <text xml:space="preserve" style="font-size:2.82222px;fill:#000000;" x="137.41663" y="99.971809"><tspan x="137.41663" y="99.971809">Tucuruvi</tspan></text>
-    <text xml:space="preserve" style="font-size:2.82222px;fill:#000000;" x="137.41663" y="106.32182"><tspan x="137.41663" y="106.32182">Parada Inglesa</tspan></text>
-    <text xml:space="preserve" style="font-size:2.82222px;fill:#000000;" x="137.41663" y="112.67178"><tspan x="137.41663" y="112.67178">Jardim São Paulo **</tspan></text>
-    <text xml:space="preserve" style="font-size:2.82222px;fill:#000000;" x="137.41663" y="119.02184"><tspan x="137.41663" y="119.02184">Santana</tspan></text>
-    <text xml:space="preserve" style="font-size:2.82222px;fill:#000000;" x="137.41663" y="125.37189"><tspan x="137.41663" y="125.37189">Carandiru</tspan></text>
-    <text xml:space="preserve" style="font-size:2.82222px;fill:#000000;" x="137.41663" y="131.72194"><tspan x="137.41663" y="131.72194">Portuguesa-Tietê</tspan></text>
-    <text xml:space="preserve" style="font-size:2.82222px;fill:#000000;" x="137.41663" y="138.07193"><tspan x="137.41663" y="138.07193">Armênia</tspan></text>
-    <text xml:space="preserve" style="font-size:2.82222px;fill:#000000;" x="137.41663" y="144.42191"><tspan x="137.41663" y="144.42191">Tiradentes</tspan></text>
-    <text xml:space="preserve" style="font-size:2.82222px;fill:#000000;" x="137.41663" y="167.70523"><tspan x="137.41663" y="167.70523">São Bento</tspan></text>
-    <text xml:space="preserve" style="font-size:2.82222px;fill:#000000;" x="137.41663" y="186.7552"><tspan x="137.41663" y="186.7552">Liberdade</tspan></text>
-    <text xml:space="preserve" style="font-size:2.82222px;fill:#000000;" x="137.41663" y="193.10519"><tspan x="137.41663" y="193.10519">São Joaquim</tspan></text>
-    <text xml:space="preserve" style="font-size:2.82222px;fill:#000000;" x="137.41663" y="199.45518"><tspan x="137.41663" y="199.45518">Vergueiro</tspan></text>
-    <text xml:space="preserve" style="font-size:2.82222px;fill:#000000;" x="138.21037" y="212.41983"><tspan x="138.21037" y="212.41983">Ana Rosa</tspan></text>
-    <text xml:space="preserve" style="font-size:2.82222px;fill:#000000;" x="136.30379" y="221.77197"><tspan x="136.30379" y="221.77197">Vila Mariana</tspan></text>
-    <text xml:space="preserve" style="font-size:2.82222px;fill:#000000;" x="143.63074" y="233.35289"><tspan x="143.63074" y="233.35289">Santa Cruz</tspan></text>
-    <text xml:space="preserve" style="font-size:2.82222px;fill:#000000;" x="137.41663" y="241.25925"><tspan x="137.41663" y="241.25925">Praça da Árvore</tspan></text>
-    <text xml:space="preserve" style="font-size:2.82222px;fill:#000000;" x="137.41663" y="247.60931"><tspan x="137.41663" y="247.60931">Saúde</tspan></text>
-    <text xml:space="preserve" style="font-size:2.82222px;fill:#000000;" x="137.41663" y="253.95938"><tspan x="137.41663" y="253.95938">São Judas</tspan></text>
-    <text xml:space="preserve" style="font-size:2.82222px;fill:#000000;" x="137.41663" y="260.30957"><tspan x="137.41663" y="260.30957">Conceição</tspan></text>
-    <text xml:space="preserve" style="font-size:2.82222px;fill:#000000;" x="137.41663" y="266.65967"><tspan x="137.41663" y="266.65967">Jabaquara</tspan></text>
-    <text xml:space="preserve" style="font-size:2.82222px;fill:#000000;" x="114.59457" y="200.13115"><tspan x="114.59457" y="200.13115">Paulista</tspan></text>
+  <g id="layer1" transform="translate(51.373913,-78.58665)">
+    
+    <!-- FUNDO DO MAPA E LEGENDA BASE -->
+    <g id="fundo-e-linhas">
+      <rect style="fill:#ffffff;fill-opacity:0.984314;" id="rect1" width="364.33124" height="211.66667" x="-51.373913" y="78.586647" rx="33.776661" ry="25.867125" />
+      <rect style="fill:#f5f5ff;stroke:#000000;stroke-width:0.314655;" id="rect2108" width="67.537918" height="95.32354" x="-51.210545" y="194.69385" />
+      
+      <!-- Linhas de trilho (Paths) -->
+      <path style="fill:none;stroke:#a0a0a0;stroke-width:1.5;" d="m -41.852785,264.82789 h -6.45456" />
+      <path style="fill:none;stroke:#aaaaaa;stroke-width:1.79194;" d="M -3.9415369,177.91389 -20.620262,177.6416" />
+      <path style="fill:none;stroke:#0000db;stroke-width:1.5;" d="m 135.35865,102.61488 v 165" />
+      <path style="fill:none;stroke:#00caee;stroke-width:1.5;" d="m 158.6761,184.01515 78.39399,75.06206" />
+      <!-- Adicione aqui os demais <path> das linhas que unem as estações -->
+    </g>
 
     <!-- ========================================== -->
-    <!-- CAMADA INTERATIVA (ONDE A MÁGICA DOS CLIQUES ACONTECE) -->
+    <!-- CAMADA INTERATIVA (ESTAÇÕES)               -->
     <!-- ========================================== -->
     <g id="estacoes-interativas">
-        <!-- Linha 1 Azul -->
-        <g class="estacao" data-nome="Tucuruvi" style="cursor: pointer;">
-            <circle cx="135.4" cy="99" r="4" fill="transparent" class="ponto-toque" />
-            <circle cx="135.4" cy="99" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-        </g>
-        <g class="estacao" data-nome="Parada Inglesa" style="cursor: pointer;">
-            <circle cx="135.4" cy="105.4" r="4" fill="transparent" class="ponto-toque" />
-            <circle cx="135.4" cy="105.4" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-        </g>
-        <g class="estacao" data-nome="Jardim São Paulo-Ayrton Senna" style="cursor: pointer;">
-            <circle cx="135.4" cy="111.7" r="4" fill="transparent" class="ponto-toque" />
-            <circle cx="135.4" cy="111.7" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-        </g>
-        <g class="estacao" data-nome="Santana" style="cursor: pointer;">
-            <circle cx="135.4" cy="118.1" r="4" fill="transparent" class="ponto-toque" />
-            <circle cx="135.4" cy="118.1" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-        </g>
-        <g class="estacao" data-nome="Carandiru" style="cursor: pointer;">
-            <circle cx="135.4" cy="124.4" r="4" fill="transparent" class="ponto-toque" />
-            <circle cx="135.4" cy="124.4" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-        </g>
-        <g class="estacao" data-nome="Portuguesa-Tietê" style="cursor: pointer;">
-            <circle cx="135.4" cy="130.8" r="4" fill="transparent" class="ponto-toque" />
-            <circle cx="135.4" cy="130.8" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-        </g>
-        <g class="estacao" data-nome="Armênia" style="cursor: pointer;">
-            <circle cx="135.4" cy="137.1" r="4" fill="transparent" class="ponto-toque" />
-            <circle cx="135.4" cy="137.1" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-        </g>
-        <g class="estacao" data-nome="São Bento" style="cursor: pointer;">
-            <circle cx="135.4" cy="166.8" r="4" fill="transparent" class="ponto-toque" />
-            <circle cx="135.4" cy="166.8" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-        </g>
-        <g class="estacao" data-nome="Liberdade" style="cursor: pointer;">
-            <circle cx="135.4" cy="185.8" r="4" fill="transparent" class="ponto-toque" />
-            <circle cx="135.4" cy="185.8" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-        </g>
-        <g class="estacao" data-nome="São Joaquim" style="cursor: pointer;">
-            <circle cx="135.4" cy="192.2" r="4" fill="transparent" class="ponto-toque" />
-            <circle cx="135.4" cy="192.2" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-        </g>
-        <g class="estacao" data-nome="Vergueiro" style="cursor: pointer;">
-            <circle cx="135.4" cy="198.5" r="4" fill="transparent" class="ponto-toque" />
-            <circle cx="135.4" cy="198.5" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-        </g>
-        <g class="estacao" data-nome="Ana Rosa" style="cursor: pointer;">
-            <circle cx="135.4" cy="211.5" r="4" fill="transparent" class="ponto-toque" />
-            <circle cx="135.4" cy="211.5" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-        </g>
-        <g class="estacao" data-nome="Vila Mariana" style="cursor: pointer;">
-            <circle cx="135.4" cy="221.8" r="4" fill="transparent" class="ponto-toque" />
-            <circle cx="135.4" cy="221.8" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-        </g>
-        <g class="estacao" data-nome="Santa Cruz" style="cursor: pointer;">
-            <circle cx="135.4" cy="233.4" r="4" fill="transparent" class="ponto-toque" />
-            <circle cx="135.4" cy="233.4" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-        </g>
-        <g class="estacao" data-nome="Praça da Árvore" style="cursor: pointer;">
-            <circle cx="135.4" cy="241.3" r="4" fill="transparent" class="ponto-toque" />
-            <circle cx="135.4" cy="241.3" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-        </g>
-        <g class="estacao" data-nome="Saúde" style="cursor: pointer;">
-            <circle cx="135.4" cy="246.7" r="4" fill="transparent" class="ponto-toque" />
-            <circle cx="135.4" cy="246.7" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-        </g>
-        <g class="estacao" data-nome="São Judas" style="cursor: pointer;">
-            <circle cx="135.4" cy="253.0" r="4" fill="transparent" class="ponto-toque" />
-            <circle cx="135.4" cy="253.0" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-        </g>
-        <g class="estacao" data-nome="Conceição" style="cursor: pointer;">
-            <circle cx="135.4" cy="259.4" r="4" fill="transparent" class="ponto-toque" />
-            <circle cx="135.4" cy="259.4" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-        </g>
-        <g class="estacao" data-nome="Jabaquara" style="cursor: pointer;">
-            <circle cx="135.4" cy="265.7" r="4" fill="transparent" class="ponto-toque" />
-            <circle cx="135.4" cy="265.7" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-        </g>
-        <!-- Linha 4 Amarela -->
-        <g class="estacao" data-nome="Paulista" style="cursor: pointer;">
-            <circle cx="112.1" cy="200.1" r="4" fill="transparent" class="ponto-toque" />
-            <circle cx="112.1" cy="200.1" r="1.5" fill="#ffd104" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-        </g>
+        
+        <!-- === LINHA 1 AZUL === -->
+        <g id="linha-1-azul">
+            <!-- Padrão: 
+                 ponto-toque = r="4" ou "5" (transparente, área grande para dedo)
+                 ponto-visual = r="1.5" (colorido, o que o usuário vê) -->
+            <g class="estacao" data-nome="Tucuruvi">
+                <circle cx="135.4" cy="99.0" r="5" fill="transparent" class="ponto-toque" />
+                <circle cx="135.4" cy="99.0" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
+                <text x="138.4" y="100.0" style="font-size:2.82222px;fill:#000000;" class="nome-estacao">Tucuruvi</text>
+            </g>
+            <g class="estacao" data-nome="Parada Inglesa">
+                <circle cx="135.4" cy="105.4" r="5" fill="transparent" class="ponto-toque" />
+                <circle cx="135.4" cy="105.4" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
+                <text x="138.4" y="106.3" style="font-size:2.82222px;fill:#000000;" class="nome-estacao">Parada Inglesa</text>
+            </g>
+            <g class="estacao" data-nome="Jardim São Paulo">
+                <circle cx="135.4" cy="111.7" r="5" fill="transparent" class="ponto-toque" />
+                <circle cx="135.4" cy="111.7" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
+                <text x="138.4" y="112.6" style="font-size:2.82222px;fill:#000000;" class="nome-estacao">Jardim São Paulo **</text>
+            </g>
+            <g class="estacao" data-nome="Santana">
+                <circle cx="135.4" cy="118.1" r="5" fill="transparent" class="ponto-toque" />
+                <circle cx="135.4" cy="118.1" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
+                <text x="138.4" y="119.0" style="font-size:2.82222px;fill:#000000;" class="nome-estacao">Santana</text>
+            </g>
+            <g class="estacao" data-nome="São Bento">
+                <circle cx="135.4" cy="166.8" r="5" fill="transparent" class="ponto-toque" />
+                <circle cx="135.4" cy="166.8" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
+                <text x="138.4" y="167.7" style="font-size:2.82222px;fill:#000000;" class="nome-estacao">São Bento</text>
+            </g>
+            <g class="estacao" data-nome="Liberdade">
+                <circle cx="135.4" cy="185.8" r="5" fill="transparent" class="ponto-toque" />
+                <circle cx="135.4" cy="185.8" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
+                <text x="138.4" y="186.7" style="font-size:2.82222px;fill:#000000;" class="nome-estacao">Liberdade</text>
+            </g>
+            <g class="estacao" data-nome="São Joaquim">
+                <circle cx="135.4" cy="192.2" r="5" fill="transparent" class="ponto-toque" />
+                <circle cx="135.4" cy="192.2" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
+                <text x="138.4" y="193.1" style="font-size:2.82222px;fill:#000000;" class="nome-estacao">São Joaquim</text>
+            </g>
+        </g> <!-- Fim Linha 1 -->
+
+        <!-- === LINHA 4 AMARELA === -->
+        <g id="linha-4-amarela">
+            <g class="estacao" data-nome="Paulista">
+                <circle cx="112.1" cy="200.1" r="5" fill="transparent" class="ponto-toque" />
+                <circle cx="112.1" cy="200.1" r="1.5" fill="#ffd104" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
+                <text x="114.5" y="200.1" style="font-size:2.82222px;fill:#000000;" class="nome-estacao">Paulista</text>
+            </g>
+            <g class="estacao" data-nome="Mackenzie">
+                <circle cx="116.8" cy="189.4" r="5" fill="transparent" class="ponto-toque" />
+                <circle cx="116.8" cy="189.4" r="1.5" fill="#ffd104" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
+                <text x="115.2" y="191.9" style="font-size:2.82222px;fill:#000000; text-anchor:end;" class="nome-estacao">Mackenzie</text>
+            </g>
+        </g> <!-- Fim Linha 4 -->
+
+        <!-- === LINHA 15 PRATA (Exemplo Prático com rotação) === -->
+        <g id="linha-15-prata">
+            <g class="estacao" data-nome="São Lucas">
+                <!-- Observe que o cx/cy é do círculo, e o transform rotaciona apenas o texto! -->
+                <circle cx="275.2" cy="216.3" r="5" fill="transparent" class="ponto-toque" />
+                <circle cx="275.2" cy="216.3" r="1.5" fill="#8c8c8c" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
+                <!-- Mantemos a transformação e coordenadas do texto que estava no seu arquivo original -->
+                <text x="278.4" y="79.0" transform="matrix(0.87110515,0.4970843,-0.50293278,0.86097529,0,0)" style="font-size:2.69487px;fill:#000000;" class="nome-estacao">São Lucas</text>
+            </g>
+            <g class="estacao" data-nome="Camilo Haddad">
+                <circle cx="280.1" cy="203.0" r="5" fill="transparent" class="ponto-toque" />
+                <circle cx="280.1" cy="203.0" r="1.5" fill="#8c8c8c" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
+                <text x="285.0" y="75.1" transform="matrix(0.87110515,0.4970843,-0.50293278,0.86097529,0,0)" style="font-size:2.69487px;fill:#000000;" class="nome-estacao">Camilo Haddad</text>
+            </g>
+        </g> <!-- Fim Linha 15 -->
+
+        <!-- === LINHA 7 RUBI (Exemplo Prático inclinado) === -->
+        <g id="linha-7-rubi">
+            <g class="estacao" data-nome="Baltazar Fidélis">
+                <circle cx="35.4" cy="121.2" r="5" fill="transparent" class="ponto-toque" />
+                <circle cx="35.4" cy="121.2" r="1.5" fill="#800000" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
+                <text x="113.1" y="56.8" transform="rotate(45)" style="font-size:2.82222px;fill:#000000;" class="nome-estacao">Baltazar Fidélis</text>
+            </g>
+            <g class="estacao" data-nome="Francisco Morato">
+                <circle cx="29.0" cy="121.2" r="5" fill="transparent" class="ponto-toque" />
+                <circle cx="29.0" cy="121.2" r="1.5" fill="#800000" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
+                <text x="113.3" y="63.2" transform="rotate(45)" style="font-size:2.82222px;fill:#000000;" class="nome-estacao">Francisco Morato</text>
+            </g>
+        </g> <!-- Fim Linha 7 -->
+
     </g>
   </g>
 </svg>
