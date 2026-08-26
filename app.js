@@ -1483,4 +1483,10 @@ async function carregarMapaSVG() {
     console.error('Erro ao carregar o mapa:', error);
     document.getElementById('containerMapa').innerHTML = '<p style="text-align:center; color:red;">Erro ao carregar o mapa. Tente novamente.</p>';
   }
+
+// INICIA O CARREGAMENTO DO MAPA ASSIM QUE O APP ABRIR
+document.addEventListener("DOMContentLoaded", () => {
+    carregarMapaSVG();
+});
+    
 }
