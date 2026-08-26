@@ -1,117 +1,508 @@
-<svg
-   id="mapa-svg"
-   viewBox="0 0 364.33125 211.66668"
-   style="width: 100%; height: 100%; display: block; touch-action: none;"
-   version="1.1"
-   xmlns="http://www.w3.org/2000/svg">
-   
-  <defs id="defs2">
-    <!-- Estilos para interatividade do mapa -->
+<svg width="1377" height="800" viewBox="0 0 364.33 211.66" xmlns="http://www.w3.org/2000/svg">
+  <defs>
     <style>
-      .estacao { cursor: pointer; }
-      .estacao:hover .ponto-visual { transform: scale(1.5); transform-origin: center; transition: transform 0.2s ease; }
-      .nome-estacao { pointer-events: none; user-select: none; }
+      /* Estilos gerais e de fundo */
+      .bg-map { fill: #ffffff; fill-opacity: 0.98; }
+      .bg-panel { fill: #f5f5ff; stroke: #000; stroke-width: 0.31; }
+      
+      /* Estilos para linhas e caminhos */
+      .linha { fill: none; stroke-width: 1.5; stroke-linecap: butt; }
+      .linha-fina { fill: none; stroke-width: 1; stroke-dasharray: 2,1; }
+      .st-circle { stroke-width: 0.17; }
+      
+      /* BOTÕES DAS ESTAÇÕES - Configuração perfeita para não ficarem gigantes */
+      .estacao-btn {
+        font-family: sans-serif;
+        font-size: 2.82px;
+        fill: #000000;
+        cursor: pointer;
+        pointer-events: all; /* Garante que só o preenchimento do texto seja clicável */
+        transition: fill 0.2s ease;
+      }
+      .estacao-btn:hover {
+        fill: #ff6600;
+        font-weight: bold;
+      }
+      
+      /* Textos fixos (legendas, títulos) que não devem ser clicáveis */
+      .title-text { font-family: sans-serif; font-size: 7px; font-weight: bold; fill: #fff; pointer-events: none; text-anchor: middle; }
+      .legend-text { font-family: Arial, sans-serif; font-size: 5px; font-weight: bold; fill: #fff; pointer-events: none; }
+      .info-text { font-family: sans-serif; font-size: 2.82px; fill: #000; pointer-events: none; }
     </style>
+    
+    <marker id="Arrow2Lend" orient="auto" refY="0" refX="0" style="overflow:visible">
+      <path d="M 8.7,4.0 -2.2,0 8.7,-4.0 c -1.7,2.3 -1.7,5.6 0,8.0 z" style="fill:#000;stroke:#000;stroke-width:0.6;" transform="matrix(-1.1,0,0,-1.1,-1.1,0)" />
+    </marker>
   </defs>
 
-  <g id="layer1" transform="translate(51.373913,-78.58665)">
+  <g transform="translate(51.37,-78.58)">
+    <!-- Backgrounds -->
+    <rect class="bg-map" width="364.33" height="211.66" x="-51.37" y="78.58" rx="33.7" ry="25.8" />
+    <rect class="bg-panel" width="67.53" height="95.32" x="-51.21" y="194.69" />
+    <rect class="bg-panel" width="82.59" height="26.89" x="230.47" y="263.41" />
     
-    <!-- FUNDO DO MAPA E LINHAS CONECTORAS -->
-    <g id="fundo-e-linhas">
-      <rect style="fill:#ffffff;fill-opacity:0.984314;" id="rect1" width="364.33124" height="211.66667" x="-51.373913" y="78.586647" rx="33.776661" ry="25.867125" />
-      <rect style="fill:#f5f5ff;stroke:#000000;stroke-width:0.314655;" id="rect2108" width="67.537918" height="95.32354" x="-51.210545" y="194.69385" />
-      
-      <!-- Trilhos e conexões -->
-      <path style="fill:none;stroke:#a0a0a0;stroke-width:1.5;" d="m -41.852785,264.82789 h -6.45456" />
-      <path style="fill:none;stroke:#aaaaaa;stroke-width:1.79194;" d="M -3.9415369,177.91389 -20.620262,177.6416" />
-      <path style="fill:none;stroke:#0000db;stroke-width:1.5;" d="m 135.35865,102.61488 v 165" />
-      <path style="fill:none;stroke:#00caee;stroke-width:1.5;" d="m 158.6761,184.01515 78.39399,75.06206" />
+    <!-- Linhas Principais -->
+    <path class="linha" style="stroke:#a0a0a0;" d="M -41.85,264.82 H -48.30" />
+    <path class="linha" style="stroke:#aaaaaa;" d="M -3.94,177.91 L -20.62,177.64" />
+    <path class="linha" style="stroke:#9d1062;" d="M 11.85,121.24 L 36.16,121.24" />
+    <path class="linha" style="stroke:#9d1062;" d="M 35.45,116.69 L 50.91,116.51" />
+    <path class="linha" style="stroke:#009a00;" d="M 187.09,207.23 L 179.66,207.29" />
+    <path class="linha" style="stroke:#aaaaaa;" d="M 109.46,158.21 L 88.05,158.34" />
+    <path class="linha" style="stroke:#fd0000;" d="M 122.65,178.98 L 100.88,163.37" />
+    <path class="linha" style="stroke:#9d1062;" d="M 87.69,153.02 L 50.83,116.42" />
+    <path class="linha" style="stroke:#9d1062; stroke-opacity: 0.36;" d="M 101.05,153.50 L 89.05,153.64" />
+    <path class="linha" style="stroke:#ff6200; stroke-opacity: 0.36;" d="M 131.54,153.48 L 100.82,153.61" />
+    <path class="linha" style="stroke:#40d4b8;" d="M 70.47,178.55 L 64.97,178.51" />
+    <path class="linha" style="stroke:#ff6200;" d="M 286.30,173.24 L 238.07,173.20" />
+    <path class="linha" style="stroke:#ff6200;" d="M 177.69,173.11 L 238.07,173.07" />
+    <path class="linha" style="stroke:#6e3a80;" d="M 246.65,157.47 L 258.34,168.30" />
+    <path class="linha" style="stroke:#6e3a84;" d="M 193.77,157.40 L 177.69,168.35" />
+    <path class="linha" style="stroke:#6e3a84;" d="M 246.62,157.44 L 193.77,157.40" />
+    <path class="linha" style="stroke:#00a98f;" d="M 70.18,279.59 L 70.23,178.59" />
+    <path class="linha" style="stroke:#723ca1;" d="M 48.95,245.23 L 116.39,245.46" />
+    <path class="linha" style="stroke:#aaaaaa;" d="M 88.05,158.34 L 70.48,173.16 L -4.09,173.16" />
+    <path class="linha" style="stroke:#009a00;" d="M 180.06,207.40 L 159.02,216.88" />
+    <path class="linha" style="stroke:#009a00;" d="M 159.52,217.04 L 135.17,217.10" />
+    <path class="linha" style="stroke:#00caee;" d="M 158.67,184.01 L 237.07,259.07" />
+    <path class="linha" style="stroke:#009a00;" d="M 111.85,204.73 L 88.96,185.91" />
+    <path class="linha" style="stroke:#009a00;" d="M 130.52,204.91 H 114.25" />
+    <path class="linha" style="stroke:#ff6200;" d="M 177.69,173.11 L 158.70,173.07" />
+    <path class="linha" style="stroke:#ff6200;" d="M 158.50,173.14 L 131.02,153.29" />
+    <path class="linha" style="stroke:#0000db;" d="M 135.35,100.08 V 266.00" />
+    <path class="linha" style="stroke:#fd0000;" d="M 137.42,178.45 H 225.83" />
+    
+    <!-- Conexões adicionais de linhas -->
+    <path class="linha-fina" style="stroke:#8ced41;" d="M 178.06,163.74 L 158.02,163.75 L 131.87,149.84" />
+    <path class="linha-fina" style="stroke:#8ced41;" d="M 189.41,106.61 V 154.72" />
+    
+    <path class="linha" style="stroke:#ffd104;" d="M 96.37,206.38 L 36.01,206.58" />
+    <path class="linha" style="stroke:#febe04;" d="M 117.07,261.23 V 273.01" />
+    <path class="linha" style="stroke:#febe04; stroke-opacity:0.39;" d="M 125.47,271.31 L 87.86,228.89 L 70.98,229.30" />
+    
+    <path class="linha" style="stroke:#dd3b14; stroke-opacity:0.39;" d="M 94.85,112.54 V 168.58" />
+    <path class="linha" style="stroke:#723ca1;" d="M 159.07,221.08 L 116.09,245.53" />
+    <path class="linha" style="stroke:#8c8c8c; stroke-opacity:0.98;" d="M 265.56,203.35 L 186.25,202.85" />
+    
+    <!-- Painel de Legendas -->
+    <rect style="fill:#000;" width="364.10" height="15.93" x="-51.22" y="78.73" />
+    <text x="129.50" y="86.82" class="title-text">MAPA FUTURO DO TRANSPORTE SOBRE TRILHOS DE SÃO PAULO - 2027</text>
+    
+    <rect style="fill:#000;" width="67.76" height="8.07" x="-51.31" y="186.74" />
+    <text x="-17.41" y="192.57" class="legend-text" text-anchor="middle">LEGENDA</text>
+    
+    <rect style="fill:#000;" width="82.69" height="6.23" x="230.43" y="263.36" />
+    <text x="271.15" y="266.48" class="legend-text" text-anchor="middle">ESTAÇÕES COM NOMES EXTENSOS</text>
+    <text x="271.15" y="269.12" style="font-family:sans-serif;font-size:2.8px;fill:#fff;text-anchor:middle;">Compactados no mapa por legibilidade</text>
+
+    <!-- Legendas de Linhas -->
+    <text x="-40.92" y="198.86" class="info-text">Linha 1 Azul - Metrô-SP</text>
+    <text x="-40.92" y="204.15" class="info-text">Linha 2 Verde - Metrô-SP (exp 2027)</text>
+    <text x="-40.92" y="209.45" class="info-text">Linha 3 Vermelha - Metrô-SP</text>
+    <text x="-40.92" y="214.74" class="info-text">Linha 4 Amarela - ViaQuatro</text>
+    <text x="-40.92" y="220.03" class="info-text">Linha 5 Lilás - ViaMobilidade</text>
+    <text x="-40.92" y="224.79" class="info-text">Linha 6 Laranja - LinhaUni (2026/2027)</text>
+    <text x="-40.92" y="229.55" class="info-text">Linha 7 Rubi - TIC Trens</text>
+    <text x="-40.92" y="234.85" class="info-text">Linha 8 Diamante - ViaMobilidade</text>
+    <text x="-40.92" y="240.14" class="info-text">Linha 9 Esmeralda - ViaMobilidade</text>
+    <text x="-40.92" y="245.43" class="info-text">Linha 10 Turquesa - CPTM</text>
+    <text x="-40.92" y="250.72" class="info-text">Linha 11 Coral - Trivia Trens</text>
+    <text x="-40.92" y="256.01" class="info-text">Linha 12 Safira - Trivia Trens</text>
+    <text x="-40.90" y="260.91" class="info-text">Linha 13 Jade - Trivia Trens</text>
+    <text x="-40.76" y="265.95" class="info-text">Linha 15 Prata - Metrô-SP (exp 2026)</text>
+    <text x="-40.57" y="271.05" class="info-text">Linha 17 Ouro - ViaMobilidade (2026)</text>
+    <text x="-40.73" y="276.56" class="info-text">Transferência gratuita / Free transfer</text>
+    <text x="-40.73" y="281.86" class="info-text">Transferência tarifada / Paid transfer</text>
+    <text x="-40.88" y="286.45" class="info-text">Expresso Aeroporto / Airport Express</text>
+
+    <!-- Legendas Asteriscos -->
+    <text x="238.94" y="272.75" class="info-text">* - Santuário N. S. de Fátima - Sumaré</text>
+    <text x="255.35" y="278.04" class="info-text">** - Jardim São Paulo - Ayrton Senna</text>
+    <text x="238.41" y="283.33" class="info-text">*** - Pref. Walter Braido - S. Caetano</text>
+    <text x="248.47" y="288.62" class="info-text">**** - Pref. Celso Daniel - Santo André</text>
+
+    <!-- ESTAÇÕES: CIRCULOS -->
+    <!-- (Mantidos simplificados e agrupados por cor para otimização) -->
+    <g class="st-circle" style="fill:#000080;">
+      <circle cx="135.42" cy="103.28" r="1.54" />
+      <circle cx="135.42" cy="109.73" r="1.54" />
+      <circle cx="135.42" cy="116.18" r="1.54" />
+      <circle cx="135.42" cy="122.63" r="1.54" />
+      <circle cx="135.42" cy="129.08" r="1.54" />
+      <circle cx="135.42" cy="135.53" r="1.54" />
+      <circle cx="135.42" cy="141.98" r="1.54" />
+      <circle cx="135.42" cy="166.78" r="1.54" />
+      <circle cx="135.42" cy="173.66" r="1.54" />
+      <circle cx="147.06" cy="178.42" r="1.54" />
+      <circle cx="158.70" cy="178.42" r="1.54" />
+      <circle cx="165.05" cy="178.42" r="1.54" />
+      <circle cx="171.40" cy="178.42" r="1.54" />
+      <circle cx="177.75" cy="178.42" r="1.54" />
+      <circle cx="184.10" cy="178.42" r="1.54" />
+      <circle cx="190.45" cy="178.42" r="1.54" />
+      <circle cx="196.80" cy="178.42" r="1.54" />
+      <circle cx="203.15" cy="178.42" r="1.54" />
+      <circle cx="209.50" cy="178.42" r="1.54" />
+      <circle cx="215.85" cy="178.42" r="1.54" />
+      <circle cx="222.20" cy="178.42" r="1.54" />
+      <circle cx="129.60" cy="178.42" r="1.54" />
+      <circle cx="113.72" cy="173.13" r="1.54" />
+      <circle cx="107.37" cy="168.36" r="1.54" />
+      <circle cx="135.42" cy="185.83" r="1.54" />
+      <circle cx="135.42" cy="192.18" r="1.54" />
+      <circle cx="135.42" cy="198.53" r="1.54" />
+      <circle cx="135.42" cy="204.88" r="1.54" />
+      <circle cx="135.42" cy="211.46" r="1.54" />
+      <circle cx="135.42" cy="246.68" r="1.54" />
+      <circle cx="135.42" cy="253.03" r="1.54" />
+      <circle cx="135.42" cy="259.38" r="1.54" />
+      <circle cx="135.42" cy="265.73" r="1.54" />
+      <circle cx="124.84" cy="204.88" r="1.54" />
+      <circle cx="118.49" cy="204.88" r="1.54" />
+      <circle cx="112.14" cy="204.88" r="1.54" />
+      <circle cx="100.23" cy="195.09" r="1.54" />
+      <circle cx="94.54" cy="190.06" r="1.54" />
+      <circle cx="88.85" cy="185.69" r="1.54" />
+      <circle cx="163.99" cy="214.93" r="1.54" />
+      <circle cx="168.76" cy="212.29" r="1.54" />
+      <circle cx="174.05" cy="209.64" r="1.54" />
+      <circle cx="101.02" cy="163.34" r="1.54" />
+      <circle cx="135.55" cy="224.03" r="1.54" />
+      <circle cx="130.26" cy="211.46" r="1.54" />
+      <circle cx="135.55" cy="240.70" r="1.54" />
+      <circle cx="159.23" cy="216.75" r="1.54" />
+      <circle cx="135.42" cy="231.30" r="1.54" />
     </g>
 
-    <!-- ESTAÇÕES INTERATIVAS -->
-    <g id="estacoes-interativas">
-        
-        <!-- LINHA 1 AZUL -->
-        <g id="linha-1-azul">
-            <g class="estacao" data-nome="Tucuruvi">
-                <circle cx="135.4" cy="99.0" r="4" fill="transparent" class="ponto-toque" />
-                <circle cx="135.4" cy="99.0" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-                <text x="138.4" y="100.0" style="font-size:2.82222px;fill:#000000;" class="nome-estacao">Tucuruvi</text>
-            </g>
-            <g class="estacao" data-nome="Parada Inglesa">
-                <circle cx="135.4" cy="105.4" r="4" fill="transparent" class="ponto-toque" />
-                <circle cx="135.4" cy="105.4" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-                <text x="138.4" y="106.3" style="font-size:2.82222px;fill:#000000;" class="nome-estacao">Parada Inglesa</text>
-            </g>
-            <g class="estacao" data-nome="Jardim São Paulo">
-                <circle cx="135.4" cy="111.7" r="4" fill="transparent" class="ponto-toque" />
-                <circle cx="135.4" cy="111.7" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-                <text x="138.4" y="112.6" style="font-size:2.82222px;fill:#000000;" class="nome-estacao">Jardim São Paulo **</text>
-            </g>
-            <g class="estacao" data-nome="Santana">
-                <circle cx="135.4" cy="118.1" r="4" fill="transparent" class="ponto-toque" />
-                <circle cx="135.4" cy="118.1" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-                <text x="138.4" y="119.0" style="font-size:2.82222px;fill:#000000;" class="nome-estacao">Santana</text>
-            </g>
-            <g class="estacao" data-nome="São Bento">
-                <circle cx="135.4" cy="166.8" r="4" fill="transparent" class="ponto-toque" />
-                <circle cx="135.4" cy="166.8" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-                <text x="138.4" y="167.7" style="font-size:2.82222px;fill:#000000;" class="nome-estacao">São Bento</text>
-            </g>
-            <g class="estacao" data-nome="Liberdade">
-                <circle cx="135.4" cy="185.8" r="4" fill="transparent" class="ponto-toque" />
-                <circle cx="135.4" cy="185.8" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-                <text x="138.4" y="186.7" style="font-size:2.82222px;fill:#000000;" class="nome-estacao">Liberdade</text>
-            </g>
-            <g class="estacao" data-nome="São Joaquim">
-                <circle cx="135.4" cy="192.2" r="4" fill="transparent" class="ponto-toque" />
-                <circle cx="135.4" cy="192.2" r="1.5" fill="#00539B" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-                <text x="138.4" y="193.1" style="font-size:2.82222px;fill:#000000;" class="nome-estacao">São Joaquim</text>
-            </g>
-        </g>
-
-        <!-- LINHA 4 AMARELA -->
-        <g id="linha-4-amarela">
-            <g class="estacao" data-nome="Paulista">
-                <circle cx="112.1" cy="200.1" r="4" fill="transparent" class="ponto-toque" />
-                <circle cx="112.1" cy="200.1" r="1.5" fill="#ffd104" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-                <text x="114.5" y="200.1" style="font-size:2.82222px;fill:#000000;" class="nome-estacao">Paulista</text>
-            </g>
-            <g class="estacao" data-nome="Mackenzie">
-                <circle cx="116.8" cy="189.4" r="4" fill="transparent" class="ponto-toque" />
-                <circle cx="116.8" cy="189.4" r="1.5" fill="#ffd104" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-                <text x="115.2" y="191.9" style="font-size:2.82222px;fill:#000000; text-anchor:end;" class="nome-estacao">Mackenzie</text>
-            </g>
-        </g>
-
-        <!-- LINHA 15 PRATA -->
-        <g id="linha-15-prata">
-            <g class="estacao" data-nome="São Lucas">
-                <circle cx="275.2" cy="216.3" r="4" fill="transparent" class="ponto-toque" />
-                <circle cx="275.2" cy="216.3" r="1.5" fill="#8c8c8c" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-                <text x="278.4" y="79.0" transform="matrix(0.87110515,0.4970843,-0.50293278,0.86097529,0,0)" style="font-size:2.69487px;fill:#000000;" class="nome-estacao">São Lucas</text>
-            </g>
-            <g class="estacao" data-nome="Camilo Haddad">
-                <circle cx="280.1" cy="203.0" r="4" fill="transparent" class="ponto-toque" />
-                <circle cx="280.1" cy="203.0" r="1.5" fill="#8c8c8c" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-                <text x="285.0" y="75.1" transform="matrix(0.87110515,0.4970843,-0.50293278,0.86097529,0,0)" style="font-size:2.69487px;fill:#000000;" class="nome-estacao">Camilo Haddad</text>
-            </g>
-        </g>
-
-        <!-- LINHA 7 RUBI -->
-        <g id="linha-7-rubi">
-            <g class="estacao" data-nome="Baltazar Fidélis">
-                <circle cx="35.4" cy="121.2" r="4" fill="transparent" class="ponto-toque" />
-                <circle cx="35.4" cy="121.2" r="1.5" fill="#800000" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-                <text x="113.1" y="56.8" transform="rotate(45)" style="font-size:2.82222px;fill:#000000;" class="nome-estacao">Baltazar Fidélis</text>
-            </g>
-            <g class="estacao" data-nome="Francisco Morato">
-                <circle cx="29.0" cy="121.2" r="4" fill="transparent" class="ponto-toque" />
-                <circle cx="29.0" cy="121.2" r="1.5" fill="#800000" stroke="#ffffff" stroke-width="0.5" class="ponto-visual" />
-                <text x="113.3" y="63.2" transform="rotate(45)" style="font-size:2.82222px;fill:#000000;" class="nome-estacao">Francisco Morato</text>
-            </g>
-        </g>
-
+    <g class="st-circle" style="fill:#800000;">
+      <circle cx="131.69" cy="153.75" r="1.54" />
+      <circle cx="158.70" cy="173.13" r="1.54" />
+      <circle cx="158.70" cy="183.71" r="1.54" />
+      <circle cx="177.75" cy="173.13" r="1.54" />
+      <circle cx="163.99" cy="189.00" r="1.54" />
+      <circle cx="169.29" cy="194.29" r="1.54" />
+      <circle cx="194.39" cy="217.54" r="1.54" />
+      <circle cx="200.21" cy="223.36" r="1.54" />
+      <circle cx="205.50" cy="228.65" r="1.54" />
+      <circle cx="210.79" cy="233.94" r="1.54" />
+      <circle cx="215.55" cy="238.17" r="1.54" />
+      <circle cx="220.85" cy="243.47" r="1.54" />
+      <circle cx="225.61" cy="248.76" r="1.54" />
+      <circle cx="231.96" cy="254.05" r="1.54" />
+      <circle cx="237.25" cy="259.34" r="1.54" />
+      <circle cx="70.33" cy="196.41" r="1.54" />
+      <circle cx="70.33" cy="191.12" r="1.54" />
+      <circle cx="70.33" cy="185.83" r="1.54" />
+      <circle cx="101.02" cy="153.55" r="1.54" />
+      <circle cx="88.06" cy="158.05" r="1.54" />
+      <circle cx="81.58" cy="163.60" r="1.54" />
+      <circle cx="75.76" cy="168.63" r="1.54" />
+      <circle cx="70.17" cy="173.13" r="1.54" />
+      <circle cx="109.36" cy="158.31" r="1.54" />
+      <circle cx="70.33" cy="178.42" r="1.54" />
+      <circle cx="65.04" cy="178.42" r="1.54" />
+      <circle cx="65.04" cy="173.13" r="1.54" />
+      <circle cx="70.33" cy="213.34" r="1.54" />
+      <circle cx="70.33" cy="218.64" r="1.54" />
+      <circle cx="70.33" cy="223.93" r="1.54" />
+      <circle cx="70.33" cy="229.22" r="1.54" />
+      <circle cx="70.33" cy="234.51" r="1.54" />
+      <circle cx="70.33" cy="240.86" r="1.54" />
+      <circle cx="70.33" cy="248.93" r="1.54" />
+      <circle cx="70.33" cy="259.62" r="1.54" />
+      <circle cx="70.33" cy="264.28" r="1.54" />
+      <circle cx="70.23" cy="269.69" r="1.54" />
+      <circle cx="70.25" cy="274.64" r="1.54" />
+      <circle cx="222.20" cy="173.13" r="1.54" />
+      <circle cx="227.49" cy="173.13" r="1.54" />
+      <circle cx="232.79" cy="173.13" r="1.54" />
+      <circle cx="198.92" cy="157.25" r="1.54" />
+      <circle cx="204.21" cy="157.25" r="1.54" />
+      <circle cx="209.50" cy="157.25" r="1.54" />
+      <circle cx="214.79" cy="157.25" r="1.54" />
+      <circle cx="220.09" cy="157.25" r="1.54" />
+      <circle cx="225.38" cy="157.25" r="1.54" />
+      <circle cx="230.67" cy="157.25" r="1.54" />
+      <circle cx="235.96" cy="157.25" r="1.54" />
+      <circle cx="241.25" cy="157.25" r="1.54" />
+      <circle cx="246.54" cy="157.25" r="1.54" />
+      <circle cx="243.37" cy="173.13" r="1.54" />
+      <circle cx="248.66" cy="173.13" r="1.54" />
+      <circle cx="253.95" cy="173.13" r="1.54" />
+      <circle cx="259.24" cy="168.36" r="1.54" />
+      <circle cx="101.02" cy="158.31" r="1.54" />
+      <circle cx="59.75" cy="173.13" r="1.54" />
+      <circle cx="54.46" cy="173.13" r="1.54" />
+      <circle cx="49.16" cy="173.13" r="1.54" />
+      <circle cx="43.87" cy="173.13" r="1.54" />
+      <circle cx="38.58" cy="173.13" r="1.54" />
+      <circle cx="33.29" cy="173.13" r="1.54" />
+      <circle cx="28.00" cy="173.13" r="1.54" />
+      <circle cx="22.71" cy="173.13" r="1.54" />
+      <circle cx="17.41" cy="173.13" r="1.54" />
+      <circle cx="12.12" cy="173.13" r="1.54" />
+      <circle cx="6.83" cy="173.13" r="1.54" />
+      <circle cx="1.54" cy="173.13" r="1.54" />
+      <circle cx="-3.75" cy="173.13" r="1.54" />
+      <circle cx="77.74" cy="142.96" r="1.54" />
+      <circle cx="72.45" cy="137.67" r="1.54" />
+      <circle cx="67.16" cy="132.38" r="1.54" />
+      <circle cx="61.86" cy="127.09" r="1.54" />
+      <circle cx="56.57" cy="121.80" r="1.54" />
+      <circle cx="51.28" cy="116.51" r="1.54" />
+      <circle cx="40.70" cy="116.51" r="1.54" />
+      <circle cx="35.41" cy="116.33" r="1.54" />
+      <circle cx="259.24" cy="173.13" r="1.54" />
+      <circle cx="264.54" cy="173.13" r="1.54" />
+      <circle cx="269.83" cy="173.13" r="1.54" />
+      <circle cx="275.12" cy="173.13" r="1.54" />
+      <circle cx="280.41" cy="173.13" r="1.54" />
+      <circle cx="285.70" cy="173.13" r="1.54" />
     </g>
+
+    <g class="st-circle" style="fill:#ffd104;">
+      <circle cx="131.69" cy="158.84" r="1.54" />
+      <circle cx="124.17" cy="174.58" r="1.54" />
+      <circle cx="112.14" cy="200.11" r="1.54" />
+      <circle cx="96.88" cy="206.19" r="1.54" />
+      <circle cx="86.30" cy="206.19" r="1.54" />
+      <circle cx="51.99" cy="206.38" r="1.54" />
+      <circle cx="116.82" cy="189.43" r="1.54" />
+      <circle cx="103.35" cy="203.55" r="1.54" />
+      <circle cx="73.03" cy="206.19" r="1.54" />
+      <circle cx="43.64" cy="206.19" r="1.54" />
+      <circle cx="35.41" cy="206.19" r="1.54" />
+      <circle cx="116.55" cy="271.71" r="1.54" />
+      <circle cx="125.01" cy="271.71" r="1.54" />
+    </g>
+
+    <g class="st-circle" style="fill:#723ca1;">
+      <circle cx="98.38" cy="245.09" r="1.54" />
+      <circle cx="93.09" cy="245.09" r="1.54" />
+      <circle cx="87.79" cy="245.09" r="1.54" />
+      <circle cx="82.50" cy="245.09" r="1.54" />
+      <circle cx="77.21" cy="245.09" r="1.54" />
+      <circle cx="72.77" cy="245.09" r="1.54" />
+      <circle cx="65.04" cy="245.09" r="1.54" />
+      <circle cx="59.75" cy="245.09" r="1.54" />
+      <circle cx="54.46" cy="245.09" r="1.54" />
+      <circle cx="49.16" cy="245.09" r="1.54" />
+      <circle cx="103.16" cy="245.27" r="1.54" />
+      <circle cx="109.43" cy="245.27" r="1.54" />
+      <circle cx="159.23" cy="221.25" r="1.54" />
+      <circle cx="140.18" cy="231.30" r="1.54" />
+      <circle cx="115.84" cy="245.33" r="1.54" />
+      <circle cx="129.20" cy="238.18" r="1.54" />
+      <circle cx="122.85" cy="241.62" r="1.54" />
+    </g>
+
+    <!-- ESTAÇÕES: TEXTOS INTERATIVOS -->
+    <!-- Todos os textos possuem a classe estacao-btn para serem clicáveis de forma precisa! -->
+    
+    <text x="255.72" y="83.94" transform="rotate(45)" class="estacao-btn">AACD - Servidor</text>
+    <text x="137.42" y="99.97" class="estacao-btn">Tucuruvi</text>
+    <text x="137.42" y="106.32" class="estacao-btn">Parada Inglesa</text>
+    <text x="137.42" y="112.67" class="estacao-btn">Jardim São Paulo **</text>
+    <text x="137.42" y="119.02" class="estacao-btn">Santana</text>
+    <text x="137.42" y="125.37" class="estacao-btn">Carandiru</text>
+    <text x="137.42" y="131.72" class="estacao-btn">Portuguesa-Tietê</text>
+    <text x="137.42" y="138.07" class="estacao-btn">Armênia</text>
+    <text x="137.42" y="144.42" class="estacao-btn">Tiradentes</text>
+    <text x="137.42" y="167.71" class="estacao-btn">São Bento</text>
+    <text x="137.42" y="186.76" class="estacao-btn">Liberdade</text>
+    <text x="137.42" y="193.11" class="estacao-btn">São Joaquim</text>
+    <text x="137.42" y="199.46" class="estacao-btn">Vergueiro</text>
+    <text x="138.21" y="212.42" class="estacao-btn">Ana Rosa</text>
+    <text x="136.30" y="221.77" class="estacao-btn">Vila Mariana</text>
+    <text x="143.63" y="233.35" class="estacao-btn">Santa Cruz</text>
+    <text x="137.42" y="241.26" class="estacao-btn">Praça da Árvore</text>
+    <text x="137.42" y="247.61" class="estacao-btn">Saúde</text>
+    <text x="137.42" y="253.96" class="estacao-btn">São Judas</text>
+    <text x="137.42" y="260.31" class="estacao-btn">Conceição</text>
+    <text x="137.42" y="266.66" class="estacao-btn">Jabaquara</text>
+    <text x="114.59" y="200.13" class="estacao-btn">Paulista</text>
+    <text x="-103.33" y="225.09" transform="rotate(-52.6)" class="estacao-btn">Brigadeiro</text>
+    <text x="-78.52" y="226.44" transform="rotate(-49)" text-anchor="end" class="estacao-btn">Trianon-MASP</text>
+    <text x="-82.73" y="222.01" transform="rotate(-48.8)" text-anchor="end" class="estacao-btn">Consolação</text>
+    <text x="97.49" y="196.65" text-anchor="end" class="estacao-btn">Clínicas</text>
+    <text x="92.06" y="191.75" text-anchor="end" class="estacao-btn">Sumaré *</text>
+    <text x="271.87" y="44.98" transform="rotate(45)" class="estacao-btn">Chácara Klabin</text>
+    <text x="248.18" y="103.21" transform="rotate(45)" class="estacao-btn">Campo Belo</text>
+    <text x="271.14" y="32.16" transform="rotate(45)" class="estacao-btn">Alto do Ipiranga</text>
+    <text x="273.55" y="27.51" transform="rotate(45)" class="estacao-btn">Sacomã</text>
+    <text x="-32.81" y="257.82" transform="rotate(-45)" class="estacao-btn">Ipiranga</text>
+    <text x="197.97" y="218.47" class="estacao-btn">São Caetano **</text>
+    <text x="202.21" y="224.29" class="estacao-btn">Utinga</text>
+    <text x="207.50" y="229.58" class="estacao-btn">Pref. Saladino</text>
+    <text x="212.79" y="234.87" class="estacao-btn">Santo André ****</text>
+    <text x="217.55" y="239.10" class="estacao-btn">Capuava</text>
+    <text x="222.84" y="244.39" class="estacao-btn">Mauá</text>
+    <text x="227.61" y="249.69" class="estacao-btn">Guapituba</text>
+    <text x="233.96" y="254.98" class="estacao-btn">Ribeirão Pires</text>
+    <text x="239.25" y="260.27" class="estacao-btn">Rio Grande da Serra</text>
+    <text x="-69.75" y="220.69" transform="rotate(-45)" text-anchor="end" class="estacao-btn">Oscar Freire</text>
+    <text x="-86.78" y="207.78" transform="rotate(-45)" text-anchor="end" class="estacao-btn">Faria Lima</text>
+    <text x="-78.54" y="216.76" transform="rotate(-45)" text-anchor="end" class="estacao-btn">Coutinho</text>
+    <text x="68.30" y="190.33" text-anchor="end" class="estacao-btn">Villa-Lobos</text>
+    <text x="68.30" y="186.63" text-anchor="end" class="estacao-btn">Ceasa</text>
+    <text x="68.30" y="197.36" text-anchor="end" class="estacao-btn">Cid. Universitária</text>
+    <text x="68.30" y="192.98" text-anchor="end" class="estacao-btn">Jaguaré</text>
+    <text x="67.24" y="202.66" text-anchor="end" class="estacao-btn">Pinheiros</text>
+    <text x="68.30" y="214.30" text-anchor="end" class="estacao-btn">Cidade Jardim</text>
+    <text x="68.30" y="219.59" text-anchor="end" class="estacao-btn">Vila Olímpia</text>
+    <text x="68.30" y="224.88" text-anchor="end" class="estacao-btn">Berrini</text>
+    <text x="68.30" y="230.17" text-anchor="end" class="estacao-btn">Morumbi</text>
+    <text x="68.30" y="235.47" text-anchor="end" class="estacao-btn">Granja Julieta</text>
+    <text x="67.06" y="240.73" text-anchor="end" class="estacao-btn">João Dias</text>
+    <text x="68.12" y="260.55" text-anchor="end" class="estacao-btn">Socorro</text>
+    <text x="68.09" y="270.61" text-anchor="end" class="estacao-btn">Autódromo</text>
+    <text x="68.25" y="275.38" text-anchor="end" class="estacao-btn">Primavera-Interlagos</text>
+    <text x="58.83" y="280.33" class="estacao-btn">Grajaú</text>
+    <text x="-153.68" y="221.26" transform="rotate(-45)" class="estacao-btn">Giovanni Gronchi</text>
+    <text x="-133.17" y="216.76" transform="rotate(-45)" text-anchor="end" class="estacao-btn">Vila das Belezas</text>
+    <text x="-136.92" y="213.02" transform="rotate(-45)" text-anchor="end" class="estacao-btn">Campo Limpo</text>
+    <text x="-140.66" y="209.27" transform="rotate(-45)" text-anchor="end" class="estacao-btn">Capão Redondo</text>
+    <text x="233.65" y="9.77" transform="rotate(48.2)" class="estacao-btn">Pedro II</text>
+    <text x="2.97" y="222.51" transform="rotate(-45)" class="estacao-btn">Brás</text>
+    <text x="253.69" y="50.99" transform="rotate(33.2)" class="estacao-btn">Carrão</text>
+    <text x="259.45" y="47.23" transform="rotate(33.2)" class="estacao-btn">Penha</text>
+    <text x="265.20" y="43.46" transform="rotate(33.2)" class="estacao-btn">Vila Matilde</text>
+    <text x="270.07" y="40.27" transform="rotate(33.2)" class="estacao-btn">Guilhermina-Esperança</text>
+    <text x="275.39" y="36.80" transform="rotate(33.2)" class="estacao-btn">Patriarca - Vila Ré</text>
+    <text x="280.70" y="33.32" transform="rotate(33.2)" class="estacao-btn">Artur Alvim</text>
+    <text x="286.40" y="29.21" transform="rotate(33.2)" class="estacao-btn">Corinthians-Itaquera</text>
+    
+    <!-- Mais Textos da Parte 2 -->
+    <text x="-39.29" y="202.31" transform="rotate(-45)" class="estacao-btn">Santa Cecília</text>
+    <text x="-41.07" y="194.74" transform="rotate(-45)" class="estacao-btn">Marechal Deodoro</text>
+    <text x="-122.83" y="184.12" transform="rotate(-45)" class="estacao-btn">Butantã</text>
+    <text x="139.27" y="149.44" class="estacao-btn">Luz</text>
+    <text x="139.31" y="175.37" class="estacao-btn">Sé</text>
+    <text x="78.02" y="154.08" class="estacao-btn">Lapa</text>
+    <text x="84.50" y="146.54" class="estacao-btn">Piqueri</text>
+    <text x="79.74" y="141.78" class="estacao-btn">Pirituba</text>
+    <text x="74.45" y="136.48" class="estacao-btn">Vila Clarice</text>
+    <text x="69.15" y="131.19" class="estacao-btn">Jaraguá</text>
+    <text x="63.86" y="125.90" class="estacao-btn">Vila Aurora</text>
+    <text x="58.57" y="120.61" class="estacao-btn">Perus</text>
+    <text x="53.28" y="115.32" class="estacao-btn">Caieiras</text>
+    <text x="147.15" y="66.12" transform="rotate(45)" class="estacao-btn">Imp. Leopoldina</text>
+    <text x="162.81" y="79.84" transform="rotate(45)" text-anchor="end" class="estacao-btn">Cmte. Sampaio</text>
+    <text x="159.07" y="83.58" transform="rotate(45)" text-anchor="end" class="estacao-btn">Quitaúna</text>
+    <text x="155.32" y="87.32" transform="rotate(45)" text-anchor="end" class="estacao-btn">Gen. Miguel Costa</text>
+    <text x="151.58" y="91.06" transform="rotate(45)" text-anchor="end" class="estacao-btn">Carapicuíba</text>
+    <text x="147.84" y="94.80" transform="rotate(45)" text-anchor="end" class="estacao-btn">Santa Teresinha</text>
+    <text x="144.10" y="98.55" transform="rotate(45)" text-anchor="end" class="estacao-btn">Antonio João</text>
+    <text x="140.36" y="102.29" transform="rotate(45)" text-anchor="end" class="estacao-btn">Barueri</text>
+    <text x="136.61" y="106.03" transform="rotate(45)" text-anchor="end" class="estacao-btn">Jd. Belval</text>
+    <text x="132.87" y="109.77" transform="rotate(45)" text-anchor="end" class="estacao-btn">Jd. Silveira</text>
+    <text x="129.13" y="113.51" transform="rotate(45)" text-anchor="end" class="estacao-btn">Jandira</text>
+    <text x="125.39" y="117.26" transform="rotate(45)" text-anchor="end" class="estacao-btn">Sagrado Coração</text>
+    <text x="121.65" y="121.00" transform="rotate(45)" text-anchor="end" class="estacao-btn">Eng. Cardoso</text>
+    <text x="117.16" y="124.74" transform="rotate(45)" text-anchor="end" class="estacao-btn">Itapevi</text>
+    <text x="32.11" y="246.05" transform="rotate(-45)" class="estacao-btn">Eng. Goulart</text>
+    <text x="32.11" y="252.03" transform="rotate(-45)" class="estacao-btn">USP Leste</text>
+    <text x="35.85" y="255.78" transform="rotate(-45)" class="estacao-btn">Comendador Ermelino</text>
+    <text x="39.59" y="259.52" transform="rotate(-45)" class="estacao-btn">São Miguel Paulista</text>
+    <text x="43.34" y="263.26" transform="rotate(-45)" class="estacao-btn">Jd. Helena - Vila Mara</text>
+    <text x="47.08" y="267.00" transform="rotate(-45)" class="estacao-btn">Itaim Paulista</text>
+    <text x="50.82" y="270.74" transform="rotate(-45)" class="estacao-btn">Jd. Romano</text>
+    <text x="58.30" y="278.23" transform="rotate(-45)" class="estacao-btn">Eng. Manoel Feio</text>
+    <text x="62.05" y="281.97" transform="rotate(-45)" class="estacao-btn">Itaquaquecetuba</text>
+    <text x="65.79" y="285.71" transform="rotate(-45)" class="estacao-btn">Aracaré</text>
+    
+    <text x="271.78" y="82.77" transform="matrix(0.87,0.50,-0.50,0.86,0,0)" class="estacao-btn">Oratório</text>
+    <text x="287.55" y="22.52" transform="rotate(33.2)" class="estacao-btn">Dom Bosco</text>
+    <text x="291.97" y="19.62" transform="rotate(33.2)" class="estacao-btn">José Bonfácio</text>
+    <text x="296.40" y="16.72" transform="rotate(33.2)" class="estacao-btn">Guaianases</text>
+    <text x="300.83" y="13.83" transform="rotate(33.2)" class="estacao-btn">Antonio Gianetti Neto</text>
+    <text x="305.26" y="10.93" transform="rotate(33.2)" class="estacao-btn">Ferraz de Vasconcelos</text>
+    <text x="309.69" y="8.03" transform="rotate(33.2)" class="estacao-btn">Poá</text>
+    <text x="317.66" y="2.82" transform="rotate(33.2)" class="estacao-btn">Suzano</text>
+    <text x="322.09" y="-0.08" transform="rotate(33.2)" class="estacao-btn">Jundiapeba</text>
+    <text x="326.51" y="-2.98" transform="rotate(33.2)" class="estacao-btn">Brás Cubas</text>
+    <text x="330.94" y="-5.87" transform="rotate(33.2)" class="estacao-btn">Mogi das Cruzes</text>
+    <text x="335.37" y="-8.77" transform="rotate(33.2)" class="estacao-btn">Estudantes</text>
+    
+    <text x="113.14" y="56.87" transform="rotate(45)" class="estacao-btn">Baltazar Fidélis</text>
+    <text x="113.32" y="63.25" transform="rotate(45)" class="estacao-btn">Francisco Morato</text>
+    <text x="107.63" y="68.25" transform="rotate(45)" class="estacao-btn">Botujuru</text>
+    <text x="103.88" y="72.00" transform="rotate(45)" class="estacao-btn">Campo Limpo Paulista</text>
+    <text x="100.14" y="75.74" transform="rotate(45)" class="estacao-btn">Várzea Paulista</text>
+    <text x="95.65" y="80.23" transform="rotate(45)" class="estacao-btn">Jundiaí</text>
+    <text x="116.88" y="53.13" transform="rotate(45)" class="estacao-btn">Franco da Rocha</text>
+    <text x="117.39" y="131.85" transform="rotate(45)" text-anchor="end" class="estacao-btn">Santa Rita</text>
+    <text x="113.65" y="135.59" transform="rotate(45)" text-anchor="end" class="estacao-btn">Ambuitá</text>
+    <text x="278.46" y="79.01" transform="matrix(0.87,0.50,-0.50,0.86,0,0)" class="estacao-btn">São Lucas</text>
+    <text x="285.06" y="75.19" transform="matrix(0.87,0.50,-0.50,0.86,0,0)" class="estacao-btn">Camilo Haddad</text>
+    <text x="300.33" y="66.16" transform="matrix(0.87,0.50,-0.50,0.86,0,0)" class="estacao-btn">Vila União</text>
+    <text x="293.02" y="70.38" transform="matrix(0.87,0.50,-0.50,0.86,0,0)" class="estacao-btn">Vila Tolstói</text>
+    <text x="196.96" y="104.66" class="estacao-btn">Aeroporto Guarulhos</text>
+    <text x="196.96" y="113.08" class="estacao-btn">Guarulhos - CECAP</text>
+    <text x="115.27" y="191.95" text-anchor="end" class="estacao-btn">Mackenzie</text>
+    <text x="109.52" y="139.94" transform="rotate(45)" text-anchor="end" class="estacao-btn">Amador Bueno</text>
+    <text x="138.48" y="205.98" class="estacao-btn">Paraíso</text>
+    <text x="-68.71" y="181.81" transform="rotate(-45)" class="estacao-btn">Água Branca</text>
+    <text x="-26.76" y="182.57" transform="rotate(-45)" class="estacao-btn">Júlio Prestes</text>
+    <text x="-30.63" y="175.21" transform="rotate(-45)" class="estacao-btn">Palmeiras-Barra Funda</text>
+    <text x="67.94" y="265.30" text-anchor="end" class="estacao-btn">Jurubatuba</text>
+    <text x="269.91" y="36.99" transform="rotate(45)" class="estacao-btn">Santos-Imigrantes</text>
+    <text x="252.51" y="99.20" transform="rotate(45)" class="estacao-btn">Eucaliptos</text>
+    <text x="256.85" y="94.84" transform="rotate(45)" class="estacao-btn">Moema</text>
+    <text x="240.23" y="110.31" transform="rotate(45)" class="estacao-btn">Alto da Boa Vista</text>
+    <text x="236.85" y="114.17" transform="rotate(45)" class="estacao-btn">Borba Gato</text>
+    <text x="233.27" y="117.97" transform="rotate(45)" class="estacao-btn">Adolfo Pinheiro</text>
+    <text x="229.53" y="121.71" transform="rotate(45)" class="estacao-btn">Largo Treze</text>
+    <text x="228.35" y="125.79" transform="rotate(45)" class="estacao-btn">Santo Amaro</text>
+    <text x="244.71" y="106.37" transform="rotate(45)" class="estacao-btn">Brooklin</text>
+    <text x="116.14" y="188.61" text-anchor="end" class="estacao-btn">Higienópolis-</text>
+    <text x="117.60" y="179.32" text-anchor="end" class="estacao-btn">República</text>
+    <text x="-198.18" y="130.95" transform="rotate(-90)" class="estacao-btn">Anhangabaú</text>
+    <text x="96.97" y="114.51" class="estacao-btn">Brasilandia</text>
+    <text x="332.87" y="48.12" transform="matrix(0.87,0.50,-0.50,0.86,0,0)" class="estacao-btn">Jardim Colonial</text>
+    <text x="338.13" y="44.72" transform="matrix(0.87,0.50,-0.50,0.86,0,0)" class="estacao-btn">Boa Esperança</text>
+    <text x="345.49" y="41.13" transform="matrix(0.87,0.50,-0.50,0.86,0,0)" class="estacao-btn">Jacu Pêssego</text>
+    <text x="127.54" y="272.67" class="estacao-btn">Congonhas</text>
+    <text x="91.57" y="272.68" class="estacao-btn">Washington Luís</text>
+    <text x="178.31" y="193.11" class="estacao-btn">Tamanduateí</text>
+    <text x="-137.37" y="173.02" transform="rotate(-45)" class="estacao-btn">Vila Sônia</text>
+    <text x="55.64" y="289.22" class="estacao-btn">Varginha</text>
+    <text x="57.75" y="284.99" class="estacao-btn">Mendes</text>
+    <text x="191.15" y="196.69" class="estacao-btn">Vila Prudente</text>
+    <text x="83.68" y="92.23" transform="rotate(45)" class="estacao-btn">Valinhos</text>
+    <text x="79.19" y="96.72" transform="rotate(45)" class="estacao-btn">Campinas</text>
+    <text x="88.25" y="88.38" transform="rotate(45)" class="estacao-btn">Vinhedo</text>
+    <text x="92.36" y="84.48" transform="rotate(45)" class="estacao-btn">Louveira</text>
+    <text x="257.15" y="75.90" transform="rotate(45)" text-anchor="end" class="estacao-btn">Hospital</text>
+    <text x="257.15" y="78.89" transform="rotate(45)" text-anchor="end" class="estacao-btn">São Paulo</text>
+    <text x="314.10" y="5.66" transform="rotate(33.2)" class="estacao-btn">Calmon Viana</text>
+    <text x="-117.19" y="177.84" transform="rotate(-45)" text-anchor="end" class="estacao-btn">São Paulo-</text>
+    <text x="-115.45" y="180.38" transform="rotate(-45)" text-anchor="end" class="estacao-btn">Morumbi</text>
+    <text x="-28.88" y="250.69" transform="rotate(-45)" class="estacao-btn">Mooca</text>
+    <text x="249.67" y="55.06" transform="rotate(33.2)" class="estacao-btn">Tatuapé</text>
+    <text x="242.33" y="57.97" transform="rotate(33.2)" class="estacao-btn">Belém</text>
+    <text x="236.64" y="61.69" transform="rotate(33.2)" class="estacao-btn">Bresser-</text>
+    <text x="236.01" y="64.17" transform="rotate(33.2)" class="estacao-btn">Mooca</text>
+    <text x="169.76" y="71.89" transform="rotate(45)" text-anchor="end" class="estacao-btn">Presidente Altino</text>
+    <text x="165.93" y="76.25" transform="rotate(45)" text-anchor="end" class="estacao-btn">Osasco</text>
+    <text x="88.47" y="180.68" text-anchor="end" class="estacao-btn">Vila</text>
+    <text x="88.77" y="182.96" text-anchor="end" class="estacao-btn">Madalena</text>
   </g>
+
+  <!-- SCRIPT de Interatividade (Tudo pronto para usar diretamente) -->
+  <script type="text/javascript">
+    // <![CDATA[
+    document.addEventListener('DOMContentLoaded', () => {
+      const estacoes = document.querySelectorAll('.estacao-btn');
+      
+      estacoes.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          // Aqui você pode colocar a lógica do seu projeto (abrir painel, redirecionar, etc.)
+          const nomeDaEstacao = e.target.textContent.trim();
+          console.log('Estação clicada:', nomeDaEstacao);
+          alert('Você selecionou: ' + nomeDaEstacao);
+        });
+      });
+    });
+    // ]]>
+  </script>
 </svg>
