@@ -413,7 +413,16 @@ function abrirModal(id) {
     history.pushState({ modal: id }, "", "#" + id);
     
     if (id === 'modalMapa') {
-        document.getElementById('imgMapa').style.width = '100%';
+        // Inicializa o Panzoom do SVG (se existir)
+        if (typeof initPanzoom === 'function') {
+            initPanzoom();
+        }
+        
+        // MANTIDO: O código da sua imagem antiga (só caso você volte a usar imagem no futuro)
+        const imgMapaEl = document.getElementById('imgMapa');
+        if (imgMapaEl) {
+            imgMapaEl.style.width = '100%';
+        }
     }
 }
 
@@ -855,9 +864,20 @@ if(document.getElementById('input_endereco')) {
 }
 
 function alterarZoom(valor) {
-    let nivelZoomMap = parseInt(document.getElementById('imgMapa').style.width || '100');
-    nivelZoomMap = Math.max(100, Math.min(500, nivelZoomMap + valor));
-    document.getElementById('imgMapa').style.width = nivelZoomMap + '%';
+    // NOVO: Zoom via Panzoom para o mapa SVG interativo
+    if (typeof panzoomInstance !== 'undefined' && panzoomInstance) {
+        if (valor > 0) panzoomInstance.zoomIn();
+        else panzoomInstance.zoomOut();
+        return; // Retorna para não executar o zoom antigo da imagem
+    }
+    
+    // MANTIDO: O código original de zoom da imagem (como backup)
+    let imgMapaEl = document.getElementById('imgMapa');
+    if (imgMapaEl) {
+        let nivelZoomMap = parseInt(imgMapaEl.style.width || '100');
+        nivelZoomMap = Math.max(100, Math.min(500, nivelZoomMap + valor));
+        imgMapaEl.style.width = nivelZoomMap + '%';
+    }
 }
 
 // TEMA DINÂMICO
@@ -910,23 +930,23 @@ if (temaSalvo === 'dark') {
     aplicarTema(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
 }
 
-// PINCH-TO-ZOOM
+// PINCH-TO-ZOOM DA IMAGEM ANTIGA (MANTIDO INTACTO)
 const containerMapa = document.getElementById('containerMapa');
 const imgMapa = document.getElementById('imgMapa');
 
 let distInicialPinça = null; 
 let larguraInicialImg = null;
 
-if(containerMapa) {
+if(containerMapa && imgMapa) { // adicionei apenas "&& imgMapa" para segurança
     containerMapa.addEventListener('touchstart', (e) => {
-        if (e.touches.length === 2) { 
+        if (e.touches.length === 2 && imgMapa) { 
             distInicialPinça = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
             larguraInicialImg = parseInt(imgMapa.style.width || '100');
         }
     });
 
     containerMapa.addEventListener('touchmove', (e) => {
-        if (e.touches.length === 2 && distInicialPinça) {
+        if (e.touches.length === 2 && distInicialPinça && imgMapa) {
             e.preventDefault(); 
             let distanciaAtual = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
             let novaLargura = larguraInicialImg * (distanciaAtual / distInicialPinça);
@@ -1268,89 +1288,96 @@ async function enviarReporteParaBackend(linha, tipo, latUser, lonUser) {
 
 document.getElementById('aviso_legal_box').innerHTML = dicionario[idiomaAtual].aviso_legal;
 
-// FERRAMENTA DE MAPEAMENTO
-const svg = document.querySelector('svg');
+// ==========================================
+// NOVO: INICIALIZAÇÃO DO PANZOOM
+// ==========================================
+let panzoomInstance = null;
 
-svg.addEventListener('click', (e) => {
-    // Calcula a posição real do clique em relação ao viewBox (1200x1000)
-    const pt = svg.createSVGPoint();
-    pt.x = e.clientX;
-    pt.y = e.clientY;
-    const svgP = pt.matrixTransform(svg.getScreenCTM().inverse());
+function initPanzoom() {
+    const svgMapa = document.getElementById('mapa-svg');
+    const containerMapaSvg = document.getElementById('containerMapa');
     
-    const cx = Math.round(svgP.x);
-    const cy = Math.round(svgP.y);
-
-    // Gera o código XML certinho para você copiar!
-    const codigoPronto = `
-    <g class="estacao" data-nome="NOME_AQUI" style="cursor: pointer;">
-        <circle cx="${cx}" cy="${cy}" r="22" fill="transparent" class="ponto-toque" />
-        <circle cx="${cx}" cy="${cy}" r="6" fill="#COR_AQUI" stroke="#ffffff" stroke-width="2" class="ponto-visual" />
-    </g>`;
-
-    console.log("📍 Clique detectado! Copie o código abaixo:");
-    console.log(codigoPronto);
-    
-    // Alerta visual imediato no meio da tela para você ver que funcionou
-    alert(`Coordenadas capturadas: CX: ${cx}, CY: ${cy}. Veja o console! (F12)`);
-});
+    if (svgMapa && !panzoomInstance) {
+        panzoomInstance = Panzoom(svgMapa, {
+            maxScale: 5,
+            minScale: 1,
+            contain: 'outside',
+            step: 0.3
+        });
+        // Habilita o zoom usando o scroll do mouse se o usuário estiver no PC
+        if (containerMapaSvg) {
+            containerMapaSvg.addEventListener('wheel', panzoomInstance.zoomWithWheel);
+        }
+    }
+}
 
 // ==========================================
 // CÉREBRO DO MAPA INTERATIVO (CLIQUES)
 // ==========================================
 function configurarCliquesNoMapa() {
-    // Pega todas as estações que criamos no SVG
     const estacoesMapa = document.querySelectorAll('.estacao');
     
     estacoesMapa.forEach(estacaoEl => {
         estacaoEl.addEventListener('click', function(e) {
-            // Isso evita que a ferramenta de mapeamento dispare junto
-            e.stopPropagation(); 
+            e.stopPropagation(); // evita disparar cliques fora (ferramenta de mapa)
             
-            // Pega o nome da estação que está no data-nome="Luz"
             const nomeEstacao = this.getAttribute('data-nome');
             const inputOrigem = document.getElementById('input_origem');
             const inputDestino = document.getElementById('input_destino');
             
-            // LÓGICA DE CLIQUE:
-            // Se a origem estiver vazia OU se ambos já estiverem preenchidos (novo ciclo)
             if (inputOrigem.value === '' || (inputOrigem.value !== '' && inputDestino.value !== '')) {
+                inputOrigem.value = nomeEstacao;
+                inputDestino.value = '';
                 
-                inputOrigem.value = nomeEstacao; // Seta a Origem
-                inputDestino.value = '';         // Limpa o Destino
-                
-                // Remove as cores antigas de todas as estações no mapa
                 estacoesMapa.forEach(el => el.classList.remove('origem', 'destino'));
-                
-                // Pinta essa estação de Verde (classe .origem que tá no seu CSS)
                 this.classList.add('origem');
                 
-                // Feedback pro usuário
                 showToast(`📍 Origem definida: ${nomeEstacao}`);
                 dispararVibracao(50);
                 
-            } 
-            // Se já tem origem, mas não tem destino
-            else if (inputOrigem.value !== '' && inputDestino.value === '') {
-                
-                inputDestino.value = nomeEstacao; // Seta o Destino
-                
-                // Pinta essa estação de Vermelho (classe .destino que tá no seu CSS)
+            } else if (inputOrigem.value !== '' && inputDestino.value === '') {
+                inputDestino.value = nomeEstacao;
                 this.classList.add('destino');
+                
                 showToast(`🏁 Destino definido: ${nomeEstacao}`);
                 dispararVibracao(50);
                 
-                // Aguarda meio segundo pro usuário ver a bolinha vermelha e calcula a rota!
                 setTimeout(() => {
-                    fecharModal(); // Fecha o mapa (sua função nativa)
-                    calcularRota(); // Traça o caminho (sua função nativa)
+                    fecharModal(); 
+                    calcularRota();
                 }, 500);
             }
         });
     });
 }
 
-// Inicializa o cérebro do mapa assim que o app carrega
+// ==========================================
+// APLICANDO EVENTOS COM SEGURANÇA
+// ==========================================
 document.addEventListener("DOMContentLoaded", () => {
     configurarCliquesNoMapa();
+
+    // FERRAMENTA DE MAPEAMENTO (Aguardando o DOM carregar para evitar erro)
+    const svg = document.getElementById('mapa-svg');
+    if (svg) {
+        svg.addEventListener('click', (e) => {
+            const pt = svg.createSVGPoint();
+            pt.x = e.clientX;
+            pt.y = e.clientY;
+            const svgP = pt.matrixTransform(svg.getScreenCTM().inverse());
+            
+            const cx = Math.round(svgP.x);
+            const cy = Math.round(svgP.y);
+
+            const codigoPronto = `
+    <g class="estacao" data-nome="NOME_AQUI" style="cursor: pointer;">
+        <circle cx="${cx}" cy="${cy}" r="22" fill="transparent" class="ponto-toque" />
+        <circle cx="${cx}" cy="${cy}" r="6" fill="#COR_AQUI" stroke="#ffffff" stroke-width="2" class="ponto-visual" />
+    </g>`;
+
+            console.log("📍 Clique detectado! Copie o código abaixo:");
+            console.log(codigoPronto);
+            // alert(`Coordenadas capturadas: CX: ${cx}, CY: ${cy}. Veja o console! (F12)`);
+        });
+    }
 });
