@@ -16,7 +16,7 @@
         font-size: 2.82px;
         fill: #000000;
         cursor: pointer;
-        pointer-events: all; /* Garante que só o preenchimento do texto seja clicável */
+        pointer-events: none;
         transition: fill 0.2s ease;
       }
       .estacao-btn:hover {
@@ -498,73 +498,5 @@
     <text x="88.47" y="180.68" text-anchor="end" class="estacao-btn">Vila</text>
     <text x="88.77" y="182.96" text-anchor="end" class="estacao-btn">Madalena</text>
   </g>
-
-  <!-- SCRIPT de Interatividade (Tudo pronto para usar diretamente) -->
-  <script type="text/javascript">
-    // <![CDATA[
-    document.addEventListener('DOMContentLoaded', () => {
-      const estacoes = document.querySelectorAll('.estacao-btn');
-      
-      estacoes.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          // Aqui você pode colocar a lógica do seu projeto (abrir painel, redirecionar, etc.)
-          const nomeDaEstacao = e.target.textContent.trim();
-          console.log('Estação clicada:', nomeDaEstacao);
-          alert('Você selecionou: ' + nomeDaEstacao);
-        });
-      });
-    });
-    // ]]>
-  </script>
-
-    <script type="text/javascript">
-    // <![CDATA[
-    document.addEventListener('DOMContentLoaded', () => {
-      // Pega todos os textos que têm a classe estacao-btn
-      const textos = Array.from(document.querySelectorAll('.estacao-btn'));
-      const circulos = document.querySelectorAll('circle');
-
-      circulos.forEach(circulo => {
-        circulo.addEventListener('click', (e) => {
-          // Pega as coordenadas X e Y da bolinha clicada
-          const cx = parseFloat(circulo.getAttribute('cx'));
-          const cy = parseFloat(circulo.getAttribute('cy'));
-          
-          if (isNaN(cx) || isNaN(cy)) return;
-
-          let textoMaisProximo = null;
-          let menorDistancia = Infinity;
-
-          // Procura qual é o texto que está fisicamente mais perto dessa bolinha
-          textos.forEach(txt => {
-            const tx = parseFloat(txt.getAttribute('x'));
-            const ty = parseFloat(txt.getAttribute('y'));
-            
-            if (isNaN(tx) || isNaN(ty)) return;
-
-            // Cálculo matemático de distância (Teorema de Pitágoras)
-            const dx = cx - tx;
-            const dy = cy - ty;
-            const distancia = Math.sqrt(dx * dx + dy * dy);
-
-            if (distancia < menorDistancia) {
-              menorDistancia = distancia;
-              textoMaisProximo = txt;
-            }
-          });
-
-          // Se achou o texto, dispara a ação
-          if (textoMaisProximo) {
-            // Limpa o nome (tira espaços extras e aqueles asteriscos da legenda)
-            let nomeDaEstacao = textoMaisProximo.textContent.trim().replace(/\*+$/, '').trim();
-            
-            console.log('Estação clicada:', nomeDaEstacao);
-            alert('Você selecionou a estação: ' + nomeDaEstacao);
-          }
-        });
-      });
-    });
-    // ]]>
-  </script>
   
 </svg>
