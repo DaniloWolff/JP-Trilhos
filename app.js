@@ -1382,7 +1382,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ===========================
-// CARREGAMENTO DO MAPA SVG EXTERNO E ZOOM
+// CARREGAMENTO DO MAPA SVG EXTERNO
 // ===========================
 async function carregarMapaSVG() {
   try {
@@ -1391,6 +1391,8 @@ async function carregarMapaSVG() {
     
     const svgText = await response.text();
     const container = document.getElementById('containerMapa');
+    
+    // Injeta o SVG (isso substitui o texto "Carregando mapa...")
     container.innerHTML = svgText;
     
     const svgElement = container.querySelector('svg');
@@ -1399,30 +1401,9 @@ async function carregarMapaSVG() {
         svgElement.style.width = '100%';
         svgElement.style.height = '100%';
         svgElement.style.display = 'block';
-        
-        // 1. ATIVAR O PANZOOM
-        const panzoom = Panzoom(svgElement, {
-            maxScale: 6,
-            minScale: 1,
-            step: 0.3,
-            contain: 'outside'
-        });
-
-        // 2. PERMITE DAR ZOOM COM A RODINHA DO MOUSE
-        container.addEventListener('wheel', panzoom.zoomWithWheel);
-
-        // 3. FERRAMENTA DE MAPEAR COORDENADAS (Caso precise no futuro)
-        svgElement.addEventListener('click', (e) => {
-            if(e.target.tagName === 'circle') return; // Ignora se clicar numa bolinha de estação
-            const pt = svgElement.createSVGPoint();
-            pt.x = e.clientX;
-            pt.y = e.clientY;
-            const svgP = pt.matrixTransform(svgElement.getScreenCTM().inverse());
-            console.log(`Coordenada: cx="${Math.round(svgP.x)}" cy="${Math.round(svgP.y)}"`);
-        });
 
         // ========================================================
-        // 4. A MÁGICA DOS CLIQUES NAS BOLINHAS DO SVG
+        // A MÁGICA DOS CLIQUES NAS BOLINHAS DO SVG
         // ========================================================
         const textos = Array.from(svgElement.querySelectorAll('.estacao-btn'));
         const circulos = svgElement.querySelectorAll('circle');
@@ -1434,7 +1415,7 @@ async function carregarMapaSVG() {
 
         circulos.forEach(circulo => {
             circulo.addEventListener('click', (e) => {
-                e.stopPropagation(); // Evita que clique no mapa geral
+                e.stopPropagation(); // Evita que clique no fundo sem querer
                 
                 const cx = parseFloat(circulo.getAttribute('cx'));
                 const cy = parseFloat(circulo.getAttribute('cy'));
@@ -1460,10 +1441,10 @@ async function carregarMapaSVG() {
                 });
 
                 if (textoMaisProximo) {
-                    // Limpa o nome (tira os asteriscos e espaços)
+                    // Limpa o nome (tira os asteriscos e espaços extras)
                     let nomeEstacao = textoMaisProximo.textContent.trim().replace(/\*+$/, '').trim();
                     
-                    // Integra com a sua lógica de rotas
+                    // Integra com a sua lógica de Origem e Destino
                     const inputOrigem = document.getElementById('input_origem');
                     const inputDestino = document.getElementById('input_destino');
                     
@@ -1500,6 +1481,6 @@ async function carregarMapaSVG() {
     }
   } catch (error) {
     console.error('Erro ao carregar o mapa:', error);
-    document.getElementById('containerMapa').innerHTML = '<p style="text-align:center; color:red;">Erro ao carregar o mapa.</p>';
+    document.getElementById('containerMapa').innerHTML = '<p style="text-align:center; color:red;">Erro ao carregar o mapa. Tente novamente.</p>';
   }
 }
