@@ -1384,10 +1384,10 @@ document.addEventListener("DOMContentLoaded", () => {
 // ===========================
 // CARREGAMENTO DO MAPA SVG EXTERNO
 // ===========================
-
 async function carregarMapaSVG() {
   try {
-    // Busca o arquivo mapa.svg que está na sua pasta
+    // Atenção: O Cloudflare faz diferença entre maiúsculas e minúsculas! 
+    // Garanta que o arquivo salvo está exatamente como mapa.svg (tudo minúsculo)
     const response = await fetch('mapa.svg');
     
     if (!response.ok) {
@@ -1395,12 +1395,9 @@ async function carregarMapaSVG() {
     }
     
     const svgText = await response.text();
-    
-    // Injeta o SVG dentro do container no HTML
     const container = document.getElementById('containerMapa');
     container.innerHTML = svgText;
     
-    // Pega o SVG que acabou de ser injetado para garantir os estilos do Panzoom
     const svgElement = container.querySelector('svg');
     if (svgElement) {
         svgElement.setAttribute('id', 'mapa-svg');
@@ -1410,8 +1407,30 @@ async function carregarMapaSVG() {
         svgElement.style.touchAction = 'none';
     }
 
-    // AGORA SIM, com o SVG na tela, ativamos os cliques nas estações!
+    // 1. Ativa os cliques de origem/destino nas estações
     configurarCliquesNoMapa();
+    
+    // 2. Ativa a ferramenta de captura de coordenadas (AGORA SIM FUNCIONA)
+    if (svgElement) {
+        svgElement.addEventListener('click', (e) => {
+            const pt = svgElement.createSVGPoint();
+            pt.x = e.clientX;
+            pt.y = e.clientY;
+            const svgP = pt.matrixTransform(svgElement.getScreenCTM().inverse());
+            
+            const cx = Math.round(svgP.x);
+            const cy = Math.round(svgP.y);
+
+            const codigoPronto = `
+    <g class="estacao" data-nome="NOME_AQUI" style="cursor: pointer;">
+        <circle cx="${cx}" cy="${cy}" r="22" fill="transparent" class="ponto-toque" />
+        <circle cx="${cx}" cy="${cy}" r="6" fill="#COR_AQUI" stroke="#ffffff" stroke-width="2" class="ponto-visual" />
+    </g>`;
+
+            console.log("📍 Clique detectado! Copie o código abaixo:");
+            console.log(codigoPronto);
+        });
+    }
     
   } catch (error) {
     console.error('Erro ao carregar o mapa:', error);
@@ -1422,11 +1441,8 @@ async function carregarMapaSVG() {
 // ===========================
 // INICIALIZAÇÃO QUANDO A PÁGINA CARREGA
 // ===========================
-
 document.addEventListener('DOMContentLoaded', () => {
   // Carrega o SVG externo assim que o app abrir
   carregarMapaSVG();
-  
-  // (Suas outras chamadas que já ficavam aqui no DOMContentLoaded)
 });
 
