@@ -37,6 +37,9 @@
       
       /* Garante que TODAS as bolinhas recebam os cliques e fiquem com o cursor de mãozinha */
       circle {
+        fill: #ffffff !important;
+        stroke: #333333 !important;
+        stroke-width: 0.6 !important;
         pointer-events: auto;
         cursor: pointer;
       }
@@ -103,14 +106,14 @@
     
     <!-- Painel de Legendas -->
     <rect style="fill:#000;" width="364.10" height="15.93" x="-51.22" y="78.73" />
-    <text x="129.50" y="86.82" class="title-text">MAPA FUTURO DO TRANSPORTE SOBRE TRILHOS DE SÃO PAULO - 2027</text>
+    <text x="129.50" y="86.82" class="title-text">MAPA METROPOLITANO • METRO TRANSPORT NETWORK</text>
     
     <rect style="fill:#000;" width="67.76" height="8.07" x="-51.31" y="186.74" />
     <text x="-17.41" y="192.57" class="legend-text" text-anchor="middle">LEGENDA</text>
     
     <rect style="fill:#000;" width="82.69" height="6.23" x="230.43" y="263.36" />
-    <text x="271.15" y="266.48" class="legend-text" text-anchor="middle">ESTAÇÕES COM NOMES EXTENSOS</text>
-    <text x="271.15" y="269.12" style="font-family:sans-serif;font-size:2.8px;fill:#fff;text-anchor:middle;">Compactados no mapa por legibilidade</text>
+    <text x="250.00" y="266.48" class="legend-text" text-anchor="middle">ESTAÇÕES COM NOMES EXTENSOS</text>
+    <text x="250.00" y="269.12" style="font-family:sans-serif;font-size:2.8px;fill:#fff;text-anchor:middle;">Compactados no mapa por legibilidade</text>
 
     <!-- Legendas de Linhas -->
     <text x="-40.92" y="198.86" class="info-text">Linha 1 Azul - Metrô-SP</text>
